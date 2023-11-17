@@ -18,6 +18,11 @@ android {
         versionCode 1
         versionName "1.0"
 
+        // 멀티 덱스라고, 한번에 메서드를 수행할수 있는 갯수를 풀어주는 역할.
+        // 이 앱이 참조할 수있는 라이브러리 갯수를 65536 갯수를 초과하면 오류가 발생하는데
+        // 이걸 막아주는 역할.
+        multiDexEnabled true
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -34,6 +39,11 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    // 뷰 한번에 담아서, 쉽게 뷰 가져오기.
+    viewBinding {
+        enabled = true
+    }
+
 }
 
 dependencies {
@@ -44,7 +54,10 @@ dependencies {
     // When using the BoM, don't specify versions in Firebase dependencies
     implementation 'com.google.firebase:firebase-analytics'
 
-
+    // 파이어베이스 인증, 제공된 UI 이용해보기. 패스
+    implementation 'com.firebaseui:firebase-ui-auth:7.2.0'
+    // 파이어베이스 인증, 라이브러리 가져오기.
+    implementation("com.google.firebase:firebase-auth-ktx")
 
     implementation 'androidx.core:core-ktx:1.9.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
