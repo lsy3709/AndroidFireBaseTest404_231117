@@ -116,6 +116,9 @@ class AddActivity : AppCompatActivity() {
                     Glide.with(this)
                         .load(task.result)
                         .into(binding.storageResultImageView)
+                    //다운로드 된 url 결과뷰에 찍어보기.
+                    binding.storageResultUrl.text = task.result.toString()
+                    Log.d("lsy", "task.result.toString() URL : ${task.result.toString()} ")
                 }
             }
             .addOnFailureListener{

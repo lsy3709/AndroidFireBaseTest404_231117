@@ -62,6 +62,14 @@
                 android:text="불러온 이미지 !"
                 android:textSize="30sp"
                 android:layout_gravity="center"
+                                />
+            <TextView
+                android:id="@+id/storageResultUrl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="storageResultUrl"
+                android:textSize="15sp"
+                android:layout_gravity="center"
                 />
             <ImageView
                 android:id="@+id/storageResultImageView"
