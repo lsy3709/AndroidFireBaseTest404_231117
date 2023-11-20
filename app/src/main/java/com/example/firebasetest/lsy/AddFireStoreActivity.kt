@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.firebasetest.lsy.MyApplication.Companion.db
 import com.example.firebasetest.lsy.Utils.MyUtil
 import com.example.firebasetest.lsy.databinding.ActivityAddFireStoreBinding
 import java.util.Date
@@ -31,6 +32,7 @@ class AddFireStoreActivity : AppCompatActivity() {
                 .addOnCompleteListener{
                     Log.d("lsy","글쓰기 성공")
                     Toast.makeText(this,"글쓰기 성공",Toast.LENGTH_SHORT).show()
+                    binding.inputEdt.text.clear()
                 }
                 // 데이터 추가 실패후 실행할 콜백 함수
                 .addOnFailureListener {
@@ -39,6 +41,23 @@ class AddFireStoreActivity : AppCompatActivity() {
                 }
 
         }
+
+        //불러오기 ,리사이클러뷰 이용해서, 조금있다가하고
+        // 현재 한개만 샘플로 불러오기.
+        // 공식문서 :
+        // https://firebase.google.com/docs/firestore/query-data/get-data?hl=ko#kotlin+ktx
+        val docRef = db.collection("TestBoard").document("5gpqhgSocpBr764zhTeK")
+        docRef.get()
+            .addOnSuccessListener { document ->
+                if (document != null) {
+                    Log.d("lsy", "DocumentSnapshot data: ${document.data}")
+                } else {
+                    Log.d("lsy", "No such document")
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.d("lsy", "get failed with ", exception)
+            }
 
     } // onCreate
 }
