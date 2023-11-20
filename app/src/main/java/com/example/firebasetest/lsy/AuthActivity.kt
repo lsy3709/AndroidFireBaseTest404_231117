@@ -142,6 +142,31 @@ class AuthActivity : AppCompatActivity() {
                 }
         }
 
+        // 가입한 이메일/패스워드로 , 로그인
+        binding.logInBtn.setOnClickListener {
+            val email = binding.authEmailEdit.text.toString()
+            val password = binding.authPasswordEdit.text.toString()
+
+            MyApplication.auth.signInWithEmailAndPassword(email,password)
+            // 로그인 잘 되었을 경우, 실행될 콜백함수 등록.
+                .addOnCompleteListener(this) {
+                    task ->
+                    binding.authEmailEdit.text.clear()
+                    binding.authPasswordEdit.text.clear()
+                    if(task.isSuccessful) {
+                        if(MyApplication.checkAuth()){
+                            MyApplication.email = email
+                            chageVisi("login")
+                        } else {
+                            Toast.makeText(this,"전송된 메일로 인증이 안되었습니다",
+                                Toast.LENGTH_SHORT).show()
+                        }
+                    } else {
+                        Toast.makeText(this,"로그인 실패",Toast.LENGTH_SHORT).show()
+                    }
+                }
+        }
+
      // onCreate
     }
 
