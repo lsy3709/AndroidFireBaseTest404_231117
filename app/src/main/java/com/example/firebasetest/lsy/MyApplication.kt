@@ -3,7 +3,10 @@ package com.example.firebasetest.lsy
 import androidx.multidex.MultiDexApplication
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.ktx.storage
 
 
 class MyApplication : MultiDexApplication() {
@@ -20,6 +23,12 @@ class MyApplication : MultiDexApplication() {
         lateinit var auth: FirebaseAuth
         // 인증할 이메일
         var email : String? = null
+
+        // 이미지 저장소 , 인스턴스 도구
+        lateinit var storage: FirebaseStorage
+        // 파이어 스토어, 인스턴스 도구
+        lateinit var db : FirebaseFirestore
+
 
         // MyApplication.checkAuth() : 이렇게 클래스명. 함수및 특정 변수에 접근이 가능함.
         fun checkAuth():Boolean {
@@ -43,6 +52,8 @@ class MyApplication : MultiDexApplication() {
         super.onCreate()
         // 초기화를 함.
         auth = Firebase.auth
+        storage = Firebase.storage
+        db = FirebaseFirestore.getInstance()
 
     }
 
