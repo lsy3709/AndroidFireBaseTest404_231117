@@ -1,6 +1,8 @@
 package com.example.firebasetest.lsy
 
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
@@ -43,7 +45,18 @@ class AddActivity : AppCompatActivity() {
             // 선택된 사진 크기 자동 조정
                 .centerCrop()
                 // 결과 뷰에 사진 넣기.
-                .into()
+                .into(binding.resultImageView)
+
+            // filePath, 갤러리에서 불러온 이미지 파일 정보 가져오기.
+            // 통으로 샘플코드 처러 사용하면 됨.
+            // 커서에 이미지 파일이름이 등록이 되어 있음.
+            val cursor = contentResolver.query(it.data?.data as Uri,
+                arrayOf<String>(MediaStore.Images.Media.DATA),null,
+                null,null)
+
+                cursor?.moveToFirst().let {
+                    filePath = cursor?.getString(0) as String
+                }
         }
     }
 
