@@ -3,8 +3,12 @@ package com.example.firebasetest.lsy
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.example.firebasetest.lsy.databinding.ActivityAuthBinding
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.common.api.ApiException
+import com.google.firebase.auth.GoogleAuthProvider
 
 class AuthActivity : AppCompatActivity() {
     lateinit var binding : ActivityAuthBinding
@@ -27,7 +31,43 @@ class AuthActivity : AppCompatActivity() {
         } else {
             Log.d("lsy","로그인 인증이 안됨")
             // 인증 되면, mode에 따라 보여주는 함수를 동작 시키기
-            chageVisi("loout")
+            chageVisi("logout")
+        }
+        // 구글 로그인 기능 확인.
+        // 1) 구글 인증 버튼 눌러서 , 2) 후처리 함수를 호출 하기.
+        // 1) 구글 인증 버튼, 구글의 파이어베이스 서버에 접속하고, 관련 인증을 가지고 돌아오기.
+        // 2) 후처리 함수 만들기. 구글의 계정의 정보를 가지고와서, 처리하는 로직.
+        val requestLauncher = registerForActivityResult(
+            // 후처리 하는 함수가 정해져 있는데, 이함수를 인증 , 권한 확인용
+            ActivityResultContracts.StartActivityForResult()
+        ){
+            // 실제 작업은 여기 이루어짐.
+            // 구글 인증 결과 처리.
+            // it.data 이부분이 구글로부터 받아온 계정 정보.
+            val task = GoogleSignIn.getSignedInAccountFromIntent(it.data)
+            // 로그인 정보가 있는지? 없는지? 또는 네트워크 연결 오류등으로
+            // 정보가 받거나 못 받거나 할 가능성이 있으면, 무조건, try catch 구문 사용함.
+            try {
+                // 계정 정보 가져오기.
+                val account = task.getResult(ApiException::class.java)
+                // 계정의 정보 가져오기.
+                val credential = GoogleAuthProvider.getCredential(account.idToken,null)
+                // 우리가 만든 MyApplication에서 auth로 확인
+                MyApplication.auth.signInWithCredential(credential)
+                    // 정보를 잘 가지고 왔을 때 , 수행이 될 콜백함수,
+                    .addOnCompleteListener(this) {
+                        // 수행할 작업.
+                        task ->
+                        if(task.isSuccessful){
+                            MyApplication.email = account.email
+                            chageVisi("login")
+                        } else {
+                            chageVisi("logout")
+                        }
+                    }
+            } catch (e:ApiException){
+                chageVisi("logout")
+            }
         }
 
      // onCreate
@@ -38,7 +78,7 @@ class AuthActivity : AppCompatActivity() {
     // 예) 로그인이 되면, 로그아웃 버튼을 보이고,
     // 예) 로그인이 안되면, 로그아웃 버튼을 사라지게 만들기. 등
     fun chageVisi(mode: String) {
-        if (mode === "로그인") {
+        if (mode === "login") {
             // 로그인이 되었다면, 인증된 이메일도 이미 등록이 되어서, 가져와서 사용하기.
             binding.authMainText.text = "${MyApplication.email} 님 반가워요."
             binding.logoutBtn.visibility = View.VISIBLE
