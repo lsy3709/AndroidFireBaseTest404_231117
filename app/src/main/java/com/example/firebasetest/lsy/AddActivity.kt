@@ -11,6 +11,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.firebasetest.lsy.databinding.ActivityAddBinding
+import java.io.File
+import java.util.UUID
 
 class AddActivity : AppCompatActivity() {
     lateinit var binding : ActivityAddBinding
@@ -72,6 +74,34 @@ class AddActivity : AppCompatActivity() {
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI,"image/*"
             )
             requestLauncher.launch(intent)
+        }
+
+        // 업로드 버튼을 눌려서, 이미지 업로드만 하고, 다운로드 보기.
+        binding.uploadBtn.setOnClickListener {
+            // 스토리지 접근 도구 ,인스턴스
+            val storage = MyApplication.storage
+            // 스토리지에 저장할 인스턴스
+            val storageRef = storage.reference
+
+            // 임시 파일 명 중복 안되게 생성하는 랜덤 문자열.
+            val uuid = UUID.randomUUID().toString()
+//            출처: https://yoon-dailylife.tistory.com/94 [알면 쓸모있는 개발 지식:티스토리]
+
+            // 이미지 저장될 위치 및 파일명
+            val imgRef = storageRef.child("AndroidImg/${uuid}.jpg")
+
+            // 파일 불러오기. 갤러리에서 사진을 선택 했고, 또한, 해당 위치에 접근해서,
+            // 파일도 불러오기 가능함.
+            val file = Uri.fromFile(File(filePath))
+            // 파이어베이스 스토리지에 업로드하는 함수.
+            imgRef.putFile(file)
+            // 업로드 후, 수행할 콜백 함수 정의. 실패했을 경우 콜백함수 정의
+                .addOnCompleteListener{
+                    Toast.makeText(this,"스토리지 업로드 완료",Toast.LENGTH_SHORT).show()
+                }
+                .addOnFailureListener {
+                    Toast.makeText(this,"스토리지 업로드 실패",Toast.LENGTH_SHORT).show()
+                }
         }
 
     } // onCreate
