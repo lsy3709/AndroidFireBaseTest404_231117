@@ -32,7 +32,7 @@
             android:text="로그아웃"
             android:textColor="#FFEB3B"
             android:textStyle="bold"
-            android:visibility="visible"/>
+            android:visibility="gone"/>
 
         <Button
             android:id="@+id/signInBtn"
@@ -43,7 +43,7 @@
             android:text="회원가입"
             android:textColor="#FFEB3B"
             android:textStyle="bold"
-            android:visibility="visible"/>
+            android:visibility="gone"/>
 
         <Button
             android:id="@+id/googleAuthInBtn"
@@ -54,7 +54,7 @@
             android:text="구글인증"
             android:textColor="#FFEB3B"
             android:textStyle="bold"
-            android:visibility="visible"/>
+            android:visibility="gone"/>
 
         <EditText
             android:id="@+id/authEmailEdit"
@@ -63,7 +63,7 @@
             android:layout_marginTop="20dp"
             android:hint="이메일"
             android:inputType="textEmailAddress"
-            android:visibility="visible"/>
+            android:visibility="gone"/>
 
         <EditText
             android:id="@+id/authPasswordEdit"
@@ -72,7 +72,7 @@
             android:layout_marginTop="20dp"
             android:hint="패스워드 6자 이상"
             android:inputType="textPassword"
-            android:visibility="visible"/>
+            android:visibility="gone"/>
 
         <Button
             android:id="@+id/signInBtn2"
@@ -83,7 +83,7 @@
             android:text="가입"
             android:textColor="#FFEB3B"
             android:textStyle="bold"
-            android:visibility="visible"/>
+            android:visibility="gone"/>
 
         <Button
             android:id="@+id/logInBtn"
@@ -94,7 +94,7 @@
             android:text="로그인"
             android:textColor="#FFEB3B"
             android:textStyle="bold"
-            android:visibility="visible"/>
+            android:visibility="gone"/>
 
 
 

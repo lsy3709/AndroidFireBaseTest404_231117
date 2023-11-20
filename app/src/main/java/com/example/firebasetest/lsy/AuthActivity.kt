@@ -22,8 +22,12 @@ class AuthActivity : AppCompatActivity() {
     // 인증이 되면, 특정 뷰로 인증됨을 확인
         if(MyApplication.checkAuth()){
             Log.d("lsy","로그인 인증이 됨")
+            // 인증 되면, mode에 따라 보여주는 함수를 동작 시키기
+            chageVisi("login")
         } else {
             Log.d("lsy","로그인 인증이 안됨")
+            // 인증 되면, mode에 따라 보여주는 함수를 동작 시키기
+            chageVisi("loout")
         }
 
      // onCreate
