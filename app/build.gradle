@@ -62,6 +62,14 @@ dependencies {
     // multiDex 임포트
     implementation 'androidx.multidex:multidex:2.0.1'
 
+    // 이미지 불러오는 라이브러리 Glide 설치.
+    implementation 'com.github.bumptech.glide:glide:4.12.0'
+    implementation 'com.github.bumptech.glide:compiler:4.12.0'
+    // 파이어베이스, 스토리지, 스토어 같이 설치.
+    implementation 'com.google.firebase:firebase-firestore-ktx:24.0.0'
+    implementation 'com.google.firebase:firebase-storage-ktx:20.0.0'
+
+
     implementation 'androidx.core:core-ktx:1.9.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.10.0'
