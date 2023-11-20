@@ -76,7 +76,8 @@ class AuthActivity : AppCompatActivity() {
         // 샘플 코드
             // 옵션, 이메일, 아이디토큰 가져오는 옵션
             val gso = GoogleSignInOptions
-                .Builder(GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN)
+                // 오타, DEFAULT_SIGN_IN 인데 여기서 게임으로 잘못 잡혔음.
+                .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(com.firebase.ui.auth.R.string.default_web_client_id))
                 .requestEmail()
                 .build()

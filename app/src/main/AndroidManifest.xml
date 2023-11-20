@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.firebasetest.lsy">
+
+<!--    외부 저장소 접근 퍼미션 추가하기-->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
 <!--    MyApplication 등록 하기-->
+
+
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
