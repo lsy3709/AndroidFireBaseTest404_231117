@@ -104,6 +104,25 @@ class AddActivity : AppCompatActivity() {
                 }
         }
 
+        //다운로드, 현재 샘플코드로, 사진 한장만, 앱이 실행이 되면, 불러오기
+        // 다운로드한 사진을 결과 뷰에 넣기.
+        val imgRef = MyApplication.storage.reference.
+        child("AndroidImg/0e3b4247-64bd-4089-a24c-5569cae778ab.jpg")
+        // 해당url 를 받아오고, Glide에 표현하기.
+        imgRef.downloadUrl
+            .addOnCompleteListener{
+                task ->
+                if(task.isSuccessful) {
+                    Glide.with(this)
+                        .load(task.result)
+                        .into(binding.storageResultImageView)
+                }
+            }
+            .addOnFailureListener{
+                Toast.makeText(this,"스토리지 사진 다운로드 실패",Toast.LENGTH_SHORT).show()
+            }
+
+
     } // onCreate
 
 
