@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
@@ -58,6 +59,8 @@ class AddActivity : AppCompatActivity() {
                     filePath = cursor?.getString(0) as String
                 }
                 Log.d("lsy","filePath : ${filePath}")
+                Toast.makeText(this,"filePath : ${filePath}",Toast.LENGTH_LONG).show()
+                binding.resultFilepath.text = filePath
             } // 조건문 닫는 블록
         }
 
