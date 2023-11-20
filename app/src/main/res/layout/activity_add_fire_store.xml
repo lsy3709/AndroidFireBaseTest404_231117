@@ -30,6 +30,12 @@
             android:layout_height="wrap_content"
             android:text="글삭제"
             android:textSize="15sp"/>
+        <Button
+            android:id="@+id/updateBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="글수정"
+            android:textSize="15sp"/>
         <TextView
             android:id="@+id/resultStoreView"
             android:layout_width="match_parent"

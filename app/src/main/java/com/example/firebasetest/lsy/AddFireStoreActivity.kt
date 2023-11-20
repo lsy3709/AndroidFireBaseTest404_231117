@@ -79,6 +79,21 @@ class AddFireStoreActivity : AppCompatActivity() {
                     Toast.makeText(this,"삭제 실패",Toast.LENGTH_SHORT).show()
                 }
         }
+// 하나  업데이트
+        // 공식문서
+        // https://firebase.google.com/docs/firestore/manage-data/add-data?hl=ko
+        binding.updateBtn.setOnClickListener {
+            val washingtonRef = db.collection("TestBoard").document("9Lx2f1FDznOmtiLemN1m")
+
+// Set the "isCapital" field of the city 'DC'
+            washingtonRef
+                .update("capital", true)
+                .addOnSuccessListener { Log.d("lsy", "DocumentSnapshot successfully updated!")
+                    Toast.makeText(this,"수정 성공",Toast.LENGTH_SHORT).show()}
+                .addOnFailureListener { e -> Log.w("lsy", "Error updating document", e)
+                    Toast.makeText(this,"수정 실패",Toast.LENGTH_SHORT).show()}
+        }
+
 
     } // onCreate
 }
