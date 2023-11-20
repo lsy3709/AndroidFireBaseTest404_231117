@@ -7,6 +7,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.example.firebasetest.lsy.databinding.ActivityAuthBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.GoogleAuthProvider
 
@@ -68,6 +69,22 @@ class AuthActivity : AppCompatActivity() {
             } catch (e:ApiException){
                 chageVisi("logout")
             }
+        }
+
+        // 구글 인증 버튼 클릭시, 해당 구글 계정 선택 화면으로 이동하는 인텐트 추가하기.
+        binding.googleAuthInBtn.setOnClickListener {
+        // 샘플 코드
+            // 옵션, 이메일, 아이디토큰 가져오는 옵션
+            val gso = GoogleSignInOptions
+                .Builder(GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN)
+                .requestIdToken(getString(com.firebase.ui.auth.R.string.default_web_client_id))
+                .requestEmail()
+                .build()
+            // 구글 인증 화면으로 이동하는 코드
+            val signInIntent = GoogleSignIn.getClient(this,gso).signInIntent
+            // 후처리 함수 동작 연결시키기.
+            requestLauncher.launch(signInIntent)
+
         }
 
      // onCreate
