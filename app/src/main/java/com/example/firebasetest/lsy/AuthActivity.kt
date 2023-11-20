@@ -3,6 +3,7 @@ package com.example.firebasetest.lsy
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.example.firebasetest.lsy.databinding.ActivityAuthBinding
@@ -93,6 +94,52 @@ class AuthActivity : AppCompatActivity() {
             MyApplication.auth.signOut()
             MyApplication.email = null
             chageVisi("logout")
+        }
+
+        //이메일/비밀번호 기능 이용하기, 파이어베이스 인증 기능임.
+        // 실제로 인증 링크를 받을수 있는 메일로 테스트
+        // 여기서 사용하는 패스워드는, 현재 로그인하기위한, 패스워드
+        // 파이어 베이스 인증, 해당 메일/ 등록한 패스워드로 등록이되고.
+        // 인증해서, 로그인 이 가능함. android:text="가입"
+        binding.signInBtn2.setOnClickListener {
+            val email = binding.authEmailEdit.text.toString()
+            val password = binding.authPasswordEdit.text.toString()
+
+            // createUserWithEmailAndPassword 이용해서, 입력한 이메일, 패스워드로 가입하기.
+            MyApplication.auth.createUserWithEmailAndPassword(email,password)
+                // 회원가입이 잘 되었을 경우, 호출되는 콜백함수임.
+                .addOnCompleteListener(this) {
+                    task ->
+                    binding.authEmailEdit.text.clear()
+                    binding.authPasswordEdit.text.clear()
+                    if(task.isSuccessful) {
+                        // 회원 가입 성공 한 경우,
+                        MyApplication.auth.currentUser?.sendEmailVerification()
+                            // 회원가입한 이메일에 인증 링크를 잘보냈다면, 수항해라 콜백함수.
+                            ?.addOnCompleteListener { sendTask ->
+                                if (sendTask.isSuccessful) {
+                                    Toast.makeText(
+                                        this,
+                                        "회원가입 성공, 전송된 메일 확인해주세요.",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    chageVisi("logout")
+                                } else {
+                                    Toast.makeText(
+                                        this,
+                                        "메일 발송 실패",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    chageVisi("logout")
+                                }
+
+                            }
+                    }else {
+                        // 회원 가입 실패 한 경우,
+                        Toast.makeText(this,"회원가입 실패",Toast.LENGTH_SHORT).show()
+                        chageVisi("logout")
+                    }
+                }
         }
 
      // onCreate
