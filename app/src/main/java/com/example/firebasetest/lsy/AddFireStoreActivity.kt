@@ -63,5 +63,22 @@ class AddFireStoreActivity : AppCompatActivity() {
                 Log.d("lsy", "get failed with ", exception)
             }
 
+        // 글 하나 삭제하기.
+        // 공식 문서
+        // https://firebase.google.com/docs/firestore/manage-data/delete-data?hl=ko
+        binding.deleteBtn.setOnClickListener {
+            db.collection("TestBoard").document("5gpqhgSocpBr764zhTeK")
+                .delete()
+                .addOnSuccessListener {
+                    Log.d("lsy", "DocumentSnapshot successfully deleted!")
+                    Toast.makeText(this,"삭제 성공",Toast.LENGTH_SHORT).show()
+
+                }
+                .addOnFailureListener { e ->
+                    Log.w("lsy", "Error deleting document", e)
+                    Toast.makeText(this,"삭제 실패",Toast.LENGTH_SHORT).show()
+                }
+        }
+
     } // onCreate
 }
