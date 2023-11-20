@@ -46,18 +46,21 @@ class AddFireStoreActivity : AppCompatActivity() {
         // 현재 한개만 샘플로 불러오기.
         // 공식문서 :
         // https://firebase.google.com/docs/firestore/query-data/get-data?hl=ko#kotlin+ktx
+        binding.deleteBtn.setOnClickListener {
         val docRef = db.collection("TestBoard").document("5gpqhgSocpBr764zhTeK")
         docRef.get()
             .addOnSuccessListener { document ->
                 if (document != null) {
                     Log.d("lsy", "DocumentSnapshot data: ${document.data}")
+                    Toast.makeText(this,"DocumentSnapshot data: ${document.data}",Toast.LENGTH_SHORT).show()
                 } else {
                     Log.d("lsy", "No such document")
+                    Toast.makeText(this,"No such document",Toast.LENGTH_SHORT).show()
                 }
             }
             .addOnFailureListener { exception ->
                 Log.d("lsy", "get failed with ", exception)
             }
-
+        }
     } // onCreate
 }
