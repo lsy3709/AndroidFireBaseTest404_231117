@@ -4,6 +4,8 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.firebasetest.lsy.MyApplication
 import com.example.firebasetest.lsy.databinding.ItemMainBinding
 import com.example.firebasetest.lsy.imageShareApp.model.ItemData
 
@@ -36,6 +38,23 @@ class MyAdapter(val context: Context, val itemList: MutableList<ItemData>)
         }
 
         // 스토리지에서 이미지 불러와서, Glide 로 출력하기.
+        val imgRef = MyApplication.storage.reference
+            // 사진이 한장이라서, 게시글의 id(자동생성된값)이용하고 있음.
+            .child("imagesShareApp/${data.docId}.jpg")
+        // 다운로드, 스토리지에서, 이미지의 저장소의 URL 가져오기.
+        imgRef.downloadUrl
+            .addOnCompleteListener{
+                // 성공시 수행할 콜백 함수, task 안에, 이미지의 url 담겨 있음.
+                task ->
+                if(task.isSuccessful) {
+                    // with 동작을 해당 activity, 등 context로 대체 .
+                    Glide.with(context)
+                        // URL 주소로 이미지 불러오기.
+                        .load(task.result)
+                        //결과 뷰에 이미지 넣기.
+                        .into(holder.binding.imageResultView)
+                }
+            }
     }
 
 }
