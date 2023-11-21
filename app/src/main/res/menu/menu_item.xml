@@ -14,12 +14,5 @@
         android:title="저장"
         app:showAsAction="always"
         />
-    <item
-        android:id="@+id/menu_add_auth"
-        android:title="인증"
-        app:showAsAction="always"
-        />
-
-
 
 </menu>

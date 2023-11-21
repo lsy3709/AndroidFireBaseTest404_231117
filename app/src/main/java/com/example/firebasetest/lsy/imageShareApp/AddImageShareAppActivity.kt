@@ -91,6 +91,7 @@ class AddImageShareAppActivity : AppCompatActivity() {
             )
             requestLauncher.launch(intent)
         }
+        // 저장 구성, 인증은 메인으로 옮기기
         return super.onOptionsItemSelected(item)
     }
 

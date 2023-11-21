@@ -23,7 +23,8 @@
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbarMain"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:background="#673AB7"/>
 
 <!--        리사이클러뷰 넣기.-->
         <androidx.recyclerview.widget.RecyclerView

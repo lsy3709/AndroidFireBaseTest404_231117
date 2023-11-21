@@ -11,6 +11,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbarAdd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#673AB7"/>
 
         <ImageView
             android:id="@+id/addImageView"
@@ -18,10 +23,7 @@
             android:layout_height="200dp"
             android:scaleType="fitXY"/>
         <!--        툴바 뷰 넣기-->
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbarAdd"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+
 
         <EditText
             android:id="@+id/contentEditView"

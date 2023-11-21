@@ -2,9 +2,12 @@ package com.example.firebasetest.lsy.imageShareApp
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.firebasetest.lsy.MyApplication
+import com.example.firebasetest.lsy.R
 import com.example.firebasetest.lsy.Utils.MyUtil
 import com.example.firebasetest.lsy.databinding.ActivityMainImageShareAppBinding
 
@@ -41,7 +44,20 @@ class MainImageShareAppActivity : AppCompatActivity() {
 
 
     }// onCreate
+    // 메뉴 붙이기. 작업.
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.auth_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
 
+    // 붙힌 메뉴 이벤트 처리하기.
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if(item.itemId === R.id.menu_add_auth) {
+           // 인증 후, 실행할 로직.
+        }
+        // 저장 구성, 인증은 메인으로 옮기기
+        return super.onOptionsItemSelected(item)
+    }
 
 
 }
