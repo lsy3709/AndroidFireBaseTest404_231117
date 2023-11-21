@@ -24,6 +24,9 @@ class AddImageShareAppActivity : AppCompatActivity() {
         binding = ActivityAddImageShareAppBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // 툴바 붙이기
+        setSupportActionBar(binding.toolbarAdd)
+
 
     } // onCreate
 
