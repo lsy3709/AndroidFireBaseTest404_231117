@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -46,10 +47,24 @@ class MainImageShareAppActivity : AppCompatActivity() {
             }
         }
 
-        // 리사이클러뷰 작업하기. 결과 데이터 가져오기.
+
 
 
     }// onCreate
+
+    override fun onStart() {
+        super.onStart()
+        if(MyApplication.checkAuth()){
+            // 리사이클러뷰 작업하기. 결과 데이터 가져오기.
+            makeRecyclerView()
+            binding.recyclerView.visibility = View.VISIBLE
+            binding.logoutTextResult.visibility = View.GONE
+        } else {
+            binding.recyclerView.visibility = View.GONE
+            binding.logoutTextResult.visibility = View.VISIBLE
+
+        }
+    }
     // 메뉴 붙이기. 작업.
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.auth_menu, menu)
