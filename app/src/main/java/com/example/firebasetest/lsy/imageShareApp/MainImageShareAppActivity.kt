@@ -1,5 +1,6 @@
 package com.example.firebasetest.lsy.imageShareApp
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -28,6 +29,7 @@ class MainImageShareAppActivity : AppCompatActivity() {
             if(MyApplication.checkAuth()) {
                 // 글쓰기 페이지 이동 -> AddImageShareApp
                 //이름 수정 : AddImageShareAppActivity
+                startActivity(Intent(this,AddImageShareAppActivity::class.java))
             } else {
                 Toast.makeText(this,"인증 후 글쓰기 해주세요",Toast.LENGTH_SHORT).show()
             }
