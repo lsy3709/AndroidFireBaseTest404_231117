@@ -6,6 +6,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.firebasetest.lsy.AuthActivity
 import com.example.firebasetest.lsy.MyApplication
 import com.example.firebasetest.lsy.R
 import com.example.firebasetest.lsy.Utils.MyUtil
@@ -54,6 +55,9 @@ class MainImageShareAppActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if(item.itemId === R.id.menu_add_auth) {
            // 인증 후, 실행할 로직.
+            // AuthActivity 구성해서, 이 화면으로 이동하게끔 설정.
+            startActivity(Intent(this,AuthActivity::class.java))
+
         }
         // 저장 구성, 인증은 메인으로 옮기기
         return super.onOptionsItemSelected(item)
