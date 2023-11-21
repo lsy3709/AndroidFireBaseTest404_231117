@@ -97,6 +97,8 @@ class AddImageShareAppActivity : AppCompatActivity() {
             requestLauncher.launch(intent)
         } else if (item.itemId === R.id.menu_add_save) {
             // 불러온 이미지와, 콘텐츠 내용 , 스토어, 스토리지 사용하기.
+            // 함수 적용하기.
+            addStore()
 
         }
         // 저장 구성, 인증은 메인으로 옮기기
