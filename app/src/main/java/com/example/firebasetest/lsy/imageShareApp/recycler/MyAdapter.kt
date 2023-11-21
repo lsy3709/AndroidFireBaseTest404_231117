@@ -1,8 +1,10 @@
 package com.example.firebasetest.lsy.imageShareApp.recycler
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.firebasetest.lsy.MyApplication
@@ -54,7 +56,26 @@ class MyAdapter(val context: Context, val itemList: MutableList<ItemData>)
                         //결과 뷰에 이미지 넣기.
                         .into(holder.binding.imageResultView)
                 }
-            }
-    }
 
-}
+            } // addOnCompleteListener
+
+        // 삭제 기능.
+        // 스토어, 이미지 삭제.
+        holder.binding.deleteBtn.setOnClickListener {
+            MyApplication.db.collection("AndroidImageShareApp")
+                .document("${data.docId}")
+                .delete()
+                .addOnSuccessListener {
+                    Log.d("lsy", "DocumentSnapshot successfully deleted!")
+                    Toast.makeText(context,"삭제 성공", Toast.LENGTH_SHORT).show()
+
+                }
+                .addOnFailureListener { e ->
+                    Log.w("lsy", "Error deleting document", e)
+                    Toast.makeText(context,"삭제 실패", Toast.LENGTH_SHORT).show()
+                }
+        }
+
+    } // onBindViewHolder
+
+} //MyAdapter
