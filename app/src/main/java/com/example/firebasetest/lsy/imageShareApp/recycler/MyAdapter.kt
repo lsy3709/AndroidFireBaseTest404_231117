@@ -1,6 +1,7 @@
 package com.example.firebasetest.lsy.imageShareApp.recycler
 
 import android.content.Context
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -10,6 +11,7 @@ import com.bumptech.glide.Glide
 import com.example.firebasetest.lsy.MyApplication
 import com.example.firebasetest.lsy.MyApplication.Companion.storage
 import com.example.firebasetest.lsy.databinding.ItemMainBinding
+import com.example.firebasetest.lsy.imageShareApp.ItemDetailActivity
 import com.example.firebasetest.lsy.imageShareApp.model.ItemData
 
 //뷰홀더 설정.
@@ -103,6 +105,25 @@ class MyAdapter(val context: Context, val itemList: MutableList<ItemData>)
                     Log.w("lsy", "Error deleting document", e)
                     Toast.makeText(context,"삭제 실패", Toast.LENGTH_SHORT).show()
                 }
+        } //  // 삭제 기능.
+
+        // 상세페이지 이동.
+        holder.binding.updateBtn.setOnClickListener {
+            // 인텐트 이동시 특정 값을 넣어서 보내고,
+        // 2번째 화면에서는 인텐트에서 꺼내서 사용하기.
+//            val intent = (context as Activity).intent
+            val intent = Intent(context,ItemDetailActivity::class.java)
+//            var docId: String? = null
+//            var email: String? = null
+//            var content: String? = null
+//            var date: String? = null
+
+            // 데이터 추가 해보기.
+            intent.putExtra("docId",data.docId)
+            intent.putExtra("email",data.email)
+            intent.putExtra("content",data.content)
+            intent.putExtra("date",data.date)
+            context.startActivity(intent)
         }
 
     } // onBindViewHolder
