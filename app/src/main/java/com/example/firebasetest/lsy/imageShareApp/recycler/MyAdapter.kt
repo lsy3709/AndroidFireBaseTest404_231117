@@ -68,6 +68,8 @@ class MyAdapter(val context: Context, val itemList: MutableList<ItemData>)
                 .addOnSuccessListener {
                     Log.d("lsy", "DocumentSnapshot successfully deleted!")
                     Toast.makeText(context,"삭제 성공", Toast.LENGTH_SHORT).show()
+                    // 변경 감지 붙이기. 비효율적임.
+                    notifyDataSetChanged()
 
                 }
                 .addOnFailureListener { e ->
