@@ -6,11 +6,14 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.firebasetest.lsy.AuthActivity
 import com.example.firebasetest.lsy.MyApplication
 import com.example.firebasetest.lsy.R
 import com.example.firebasetest.lsy.Utils.MyUtil
 import com.example.firebasetest.lsy.databinding.ActivityMainImageShareAppBinding
+import com.example.firebasetest.lsy.imageShareApp.model.ItemData
+import com.example.firebasetest.lsy.imageShareApp.recycler.MyAdapter
 
 // 스토어, 스토리지에서  데이터를 받아서, 리사이클러뷰 로 출력할 예정.
 // 인증, 구글인증, 이메일 , 패스워드 인증 재사용.
@@ -43,6 +46,8 @@ class MainImageShareAppActivity : AppCompatActivity() {
             }
         }
 
+        // 리사이클러뷰 작업하기. 결과 데이터 가져오기.
+
 
     }// onCreate
     // 메뉴 붙이기. 작업.
@@ -61,6 +66,29 @@ class MainImageShareAppActivity : AppCompatActivity() {
         }
         // 저장 구성, 인증은 메인으로 옮기기
         return super.onOptionsItemSelected(item)
+    }
+
+    // 리사이클러뷰 호출하는 함수 만들기.
+    private fun makeRecyclerView() {
+        // 스토어에서, 데이터를 모두 가져오기. 참고로
+        // 게시글 id이름, 이미지 이름 동일함. docId 임.
+        MyApplication.db.collection("AndroidImageShareApp")
+            .get()
+            .addOnSuccessListener { result ->
+                val itemList = mutableListOf<ItemData>()
+                for( doc in result) {
+                    // toObject -> 데이터 모델링, 바인딩.
+                    val item = doc.toObject(ItemData::class.java)
+                    item.docId = doc.id
+                    itemList.add(item)
+                }
+                // 리사이클러 뷰에, 1)리니어 매니저, 2)어댑터 등록
+                binding.recyclerView.layoutManager = LinearLayoutManager(this)
+                binding.recyclerView.adapter = MyAdapter(this,itemList)
+            }
+            .addOnFailureListener {
+                Toast.makeText(this,"서버 데이터 결과 조회 실패",Toast.LENGTH_SHORT).show()
+            }
     }
 
 
