@@ -27,6 +27,7 @@ class MainImageShareAppActivity : AppCompatActivity() {
             // 글쓰기 전에, 인증 여부 확인 하기.
             if(MyApplication.checkAuth()) {
                 // 글쓰기 페이지 이동 -> AddImageShareApp
+                //이름 수정 : AddImageShareAppActivity
             } else {
                 Toast.makeText(this,"인증 후 글쓰기 해주세요",Toast.LENGTH_SHORT).show()
             }
