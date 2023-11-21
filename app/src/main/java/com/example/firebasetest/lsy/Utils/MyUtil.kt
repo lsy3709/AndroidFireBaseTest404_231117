@@ -2,6 +2,7 @@ package com.example.firebasetest.lsy.Utils
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.os.Build
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -34,12 +35,27 @@ class MyUtil {
             }
 
             // 1번 요청하기.
-            if(ContextCompat.checkSelfPermission(
-                activity,
-                Manifest.permission.READ_EXTERNAL_STORAGE
-            ) !== PackageManager.PERMISSION_GRANTED) {
-                requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+            // 33버전 이상: READ_MEDIA_IMAGES
+            // 33버전 미만: READ_EXTERNAL_STORAGE
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+
+                if(ContextCompat.checkSelfPermission(
+                        activity,
+                        Manifest.permission.READ_MEDIA_IMAGES
+                    ) !== PackageManager.PERMISSION_GRANTED) {
+                    requestPermissionLauncher.launch(Manifest.permission.READ_MEDIA_IMAGES)
+                }
+
+            } else {
+
+                if(ContextCompat.checkSelfPermission(
+                        activity,
+                        Manifest.permission.READ_EXTERNAL_STORAGE
+                    ) !== PackageManager.PERMISSION_GRANTED) {
+                    requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+                }
             }
+
 
         }
         fun dateToString(date: Date):String {

@@ -103,6 +103,7 @@ class AddImageShareAppActivity : AppCompatActivity() {
 
     // 스토어 글쓰기 함수,
 
+
     // 스토리지에 업로드 함수.
     // 변경되는 부분, 이미지 파일명 = 스토어에 자동 저장이되는 id로 ,
     // docId , 스토어에서 자동생성된 문서번호 = 이미지 명 , 재사용.
