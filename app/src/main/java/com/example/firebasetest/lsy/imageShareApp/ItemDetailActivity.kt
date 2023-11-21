@@ -1,11 +1,16 @@
 package com.example.firebasetest.lsy.imageShareApp
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
+import android.text.Editable
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.firebasetest.lsy.MyApplication
 import com.example.firebasetest.lsy.MyApplication.Companion.db
 import com.example.firebasetest.lsy.Utils.MyUtil
@@ -51,7 +56,9 @@ class ItemDetailActivity : AppCompatActivity() {
 
         binding.emailDetailResultView.text = email
         binding.dateDetailResultView.text = date
-        binding.contentDetailResultView.text = content
+        binding.contentDetailResultView.text =  Editable.Factory.getInstance().newEditable(content)
+
+
 
         // 스토리지에서 이미지 불러와서, Glide 로 출력하기.
         val imgRef = MyApplication.storage.reference
@@ -69,6 +76,8 @@ class ItemDetailActivity : AppCompatActivity() {
                         .load(task.result)
                         //결과 뷰에 이미지 넣기.
                         .into(binding.imageDetailResultView)
+                    checkImg = "Y"
+                    Log.d("lsy", "checkImg : ${checkImg}")
                 }
 
             } // addOnCompleteListener
@@ -78,6 +87,13 @@ class ItemDetailActivity : AppCompatActivity() {
         binding.imageDetailResultView.setOnClickListener {
             // 1) 갤러리 호출 인텐트
             // 2) 후처리 함수가 필요함.
+            // 갤러리 사진 선택후, 결과 이미지 뷰에 , 프리뷰 미리보기 구성.
+            val intent = Intent(Intent.ACTION_PICK)
+            intent.setDataAndType(
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                "image/*"
+            )
+            requestLauncher.launch(intent)
 
         }
 
@@ -92,56 +108,106 @@ class ItemDetailActivity : AppCompatActivity() {
         // 해당 이미지 이름도 알고 있는 것과 같다.
         // 상태 변수 정하기. img 변경 유무
         // 내용은 덮어쓰기 하면 되니까.
+        binding.updateDetailBtn.setOnClickListener {
+            checkContent = "Y"
+            if(checkImg =="Y" && checkContent == "Y" ) {
+                // 1) 스토어도 업데이트,
+                // 2) 스토리지는 기존 사진 삭제 후, 새 사진으로 업로드
 
-        if(checkImg =="Y" && checkContent == "Y" ) {
-            // 1) 스토어도 업데이트,
-            // 2) 스토리지는 기존 사진 삭제 후, 새 사진으로 업로드
-
-            //            var docId: String? = null
+                //            var docId: String? = null
 //            var email: String? = null
 //            var content: String? = null
 //            var date: String? = null
-            val data = hashMapOf(
-                "docId" to "${docId}",
-                "email" to "${email}",
-                "content" to "${content}",
-                "date" to "${date}",
-            )
+                val data = hashMapOf(
+                    "docId" to "${docId}",
+                    "email" to "${email}",
+                    "content" to "${binding.contentDetailResultView.text}",
+                    "date" to "${date}",
+                )
 
-            db.collection("AndroidImageShareApp").document("${docId}")
-                .set(data)
-                .addOnSuccessListener {
-                    Log.d("lsy", "DocumentSnapshot successfully written!")
-                    // storage , 기존 이미지 삭제 후, 새 이미지 업로드.
+                db.collection("AndroidImageShareApp").document("${docId}")
+                    .set(data)
+                    .addOnSuccessListener {
+                        Log.d("lsy", "DocumentSnapshot successfully written!")
+                        // storage , 기존 이미지 삭제 후, 새 이미지 업로드.
 
-                    // Create a storage reference from our app
-                    val storageRef = MyApplication.storage.reference
+                        // Create a storage reference from our app
+                        val storageRef = MyApplication.storage.reference
 
-                    // Create a reference to the file to delete
-                    val desertRef = storageRef.child("AndroidImageShareApp/${docId}.jpg")
+                        // Create a reference to the file to delete
+                        val desertRef = storageRef.child("AndroidImageShareApp/${docId}.jpg")
 
-                    // Delete the file
-                    desertRef.delete().addOnSuccessListener {
-                        // File deleted successfully
-                        Log.d("lsy", "스토리지 successfully deleted!")
-                        Toast.makeText(this,"스토리지 삭제 성공", Toast.LENGTH_SHORT).show()
+                        // Delete the file
+                        desertRef.delete().addOnSuccessListener {
+                            // File deleted successfully
+                            Log.d("lsy", "스토리지 successfully deleted!")
+                            Toast.makeText(this,"스토리지 삭제 성공", Toast.LENGTH_SHORT).show()
 
-                        // 기존 이미지 삭제 한거고, 새 이미지 추가하기.
-                        // 갤러리에서 선택이 된 새로운 사진을 넣을 예정.
+                            // 기존 이미지 삭제 한거고, 새 이미지 추가하기.
+                            // 갤러리에서 선택이 된 새로운 사진을 넣을 예정.
+                            uploadImage(docId)
 
 
-                    }.addOnFailureListener {
-                        // Uh-oh, an error occurred!
-                        Log.d("lsy", "스토리지 failed deleted!")
-                        Toast.makeText(this,"스토리지 삭제 실패", Toast.LENGTH_SHORT).show()
+                        }.addOnFailureListener {
+                            // Uh-oh, an error occurred!
+                            Log.d("lsy", "스토리지 failed deleted!")
+                            Toast.makeText(this,"스토리지 삭제 실패", Toast.LENGTH_SHORT).show()
+                        }
                     }
-                }
-                .addOnFailureListener { e -> Log.w("lsy", "Error writing document", e) }
+                    .addOnFailureListener { e -> Log.w("lsy", "Error writing document", e) }
 
+            }
         }
 
 
+
+
     }//onCreate
+
+    // 갤러리에서, 사진을 선택 후, 후처리하는 로직.
+    // 이미 구성을 했어요.
+    // AddActivity 에서 가져오기.
+
+    // 1) 버튼,메뉴등 : 갤러리에서 사진을 선택 후,
+    // 2)가져와서 처리하는 , 후처리 함수 만들기.
+    val requestLauncher = registerForActivityResult(
+        // 갤러리에서, 사진을 선택해서 가져왔을 때, 수행할 함수.
+        ActivityResultContracts.StartActivityForResult()
+    ) {
+        // it 이라는 곳에 사진 이미지가 있음.
+        if(it.resultCode === android.app.Activity.RESULT_OK) {
+            // 이미지 불러오는 라이브러리 glide 사용하기, 코루틴이 적용이되어서, 매우 빠름.
+            // OOM(Out Of Memory 해결), gif 움직이는 사진도 가능.
+            // Glide 설치하기. build.gradle
+            // with(this) this 현재 액티비티 가리킴. 대신해서.
+            // 1) applicationContext
+            // 2) getApplicationContext()
+            Glide
+                .with(getApplicationContext())
+                // 사진을 읽기.
+                .load(it.data?.data)
+                // 크기 지정 , 가로,세로
+                .apply(RequestOptions().override(250,200))
+                // 선택된 사진 크기 자동 조정
+                .centerCrop()
+                // 결과 뷰에 사진 넣기.
+                .into(binding.imageDetailResultView)
+
+            // filePath, 갤러리에서 불러온 이미지 파일 정보 가져오기.
+            // 통으로 샘플코드 처러 사용하면 됨.
+            // 커서에 이미지 파일이름이 등록이 되어 있음.
+            val cursor = contentResolver.query(it.data?.data as Uri,
+                arrayOf<String>(MediaStore.Images.Media.DATA),null,
+                null,null);
+
+            cursor?.moveToFirst().let {
+                filePath = cursor?.getString(0) as String
+            }
+            Log.d("lsy","filePath : ${filePath}")
+            Toast.makeText(this,"filePath : ${filePath}", Toast.LENGTH_LONG).show()
+//                binding.resultFilepath.text = filePath
+        } // 조건문 닫는 블록
+    }
 
     private fun uploadImage(docId: String) {
         // 스토리지 접근 도구 ,인스턴스
