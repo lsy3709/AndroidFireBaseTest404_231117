@@ -3,10 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.firebasetest.lsy">
     <!-- 외부 저장소 접근 퍼미션 추가하기 -->
-<!--    33버전 이후 부터 미디어 접근 퍼미션 유형이 조금 다름.-->
-<!--    https://developer.android.com/about/versions/13/behavior-changes-13?hl=ko-->
+    <!-- 33버전 이후 부터 미디어 접근 퍼미션 유형이 조금 다름. -->
+    <!-- https://developer.android.com/about/versions/13/behavior-changes-13?hl=ko -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
 
     <application
         android:name=".MyApplication"
@@ -19,6 +19,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FireBaseTest"
         tools:targetApi="31">
+        <activity
+            android:name=".imageShareApp.MainImageShareAppActivity"
+            android:exported="false" />
         <activity
             android:name=".AddFireStoreActivity"
             android:exported="true" />
