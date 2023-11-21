@@ -17,6 +17,8 @@ class MainImageShareAppActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
+
+
     }// onCreate
 
 
