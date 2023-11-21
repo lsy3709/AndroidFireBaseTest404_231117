@@ -40,7 +40,7 @@ class MyAdapter(val context: Context, val itemList: MutableList<ItemData>)
         // 스토리지에서 이미지 불러와서, Glide 로 출력하기.
         val imgRef = MyApplication.storage.reference
             // 사진이 한장이라서, 게시글의 id(자동생성된값)이용하고 있음.
-            .child("imagesShareApp/${data.docId}.jpg")
+            .child("AndroidImageShareApp/${data.docId}.jpg")
         // 다운로드, 스토리지에서, 이미지의 저장소의 URL 가져오기.
         imgRef.downloadUrl
             .addOnCompleteListener{
