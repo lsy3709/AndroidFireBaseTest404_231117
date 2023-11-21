@@ -8,6 +8,7 @@
     android:orientation="vertical"
     android:paddingTop="10dp">
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -31,7 +32,12 @@
             android:layout_marginLeft="10dp"
             android:text="데이터 표시1"
             android:textSize="12sp"/>
+    </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
         <Button
             android:id="@+id/deleteBtn"
             android:layout_width="wrap_content"
@@ -45,9 +51,8 @@
             android:layout_height="wrap_content"
             android:text="수정"
             android:layout_marginLeft="5dp"/>
+        </LinearLayout>
 
-
-    </LinearLayout>
 
     <ImageView
         android:id="@+id/imageResultView"
