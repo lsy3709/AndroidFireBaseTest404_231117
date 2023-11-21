@@ -15,7 +15,8 @@
             android:id="@+id/toolbarAdd"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#673AB7"/>
+            android:background="#673AB7"
+            app:titleTextColor="#FFEB3B"/>
 
         <ImageView
             android:id="@+id/addImageView"
