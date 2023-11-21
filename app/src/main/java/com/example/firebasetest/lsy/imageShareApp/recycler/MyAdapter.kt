@@ -83,14 +83,20 @@ class MyAdapter(val context: Context, val itemList: MutableList<ItemData>)
                         // File deleted successfully
                         Log.d("lsy", "스토리지 successfully deleted!")
                         Toast.makeText(context,"스토리지 삭제 성공", Toast.LENGTH_SHORT).show()
+                        itemList.removeAt(position)
+                        notifyItemRemoved(position)
+//                        val intent = (context as Activity).intent
+//                        context.finish() //현재 액티비티 종료 실시
+//                        context.overridePendingTransition(0, 0) //효과 없애기
+//                        context.startActivity(intent) //현재 액티비티 재실행 실시
+//                        context.overridePendingTransition(0, 0) //효과 없애기
                     }.addOnFailureListener {
                         // Uh-oh, an error occurred!
                         Log.d("lsy", "스토리지 failed deleted!")
                         Toast.makeText(context,"스토리지 삭제 실패", Toast.LENGTH_SHORT).show()
                     }
 
-                    // 변경 감지 붙이기. 비효율적임.
-                    notifyDataSetChanged()
+
 
                 }
                 .addOnFailureListener { e ->

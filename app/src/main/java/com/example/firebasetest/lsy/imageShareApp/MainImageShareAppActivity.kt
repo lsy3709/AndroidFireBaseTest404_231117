@@ -23,6 +23,7 @@ import com.example.firebasetest.lsy.imageShareApp.recycler.MyAdapter
 // 수정 도전해보기.
 class MainImageShareAppActivity : AppCompatActivity() {
     lateinit var binding : ActivityMainImageShareAppBinding
+    lateinit var myAdapter : MyAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainImageShareAppBinding.inflate(layoutInflater)
@@ -87,6 +88,7 @@ class MainImageShareAppActivity : AppCompatActivity() {
     private fun makeRecyclerView() {
         // 스토어에서, 데이터를 모두 가져오기. 참고로
         // 게시글 id이름, 이미지 이름 동일함. docId 임.
+
         MyApplication.db.collection("AndroidImageShareApp")
             .get()
             .addOnSuccessListener { result ->
@@ -99,12 +101,15 @@ class MainImageShareAppActivity : AppCompatActivity() {
                 }
                 // 리사이클러 뷰에, 1)리니어 매니저, 2)어댑터 등록
                 binding.recyclerView.layoutManager = LinearLayoutManager(this)
-                binding.recyclerView.adapter = MyAdapter(this,itemList)
+                myAdapter = MyAdapter(this,itemList)
+                binding.recyclerView.adapter = myAdapter
+//                binding.recyclerView.adapter = MyAdapter(this,itemList)
             }
             .addOnFailureListener {
                 Toast.makeText(this,"서버 데이터 결과 조회 실패",Toast.LENGTH_SHORT).show()
             }
-    }
+
+    } // makeRecyclerView
 
 
 }
