@@ -168,7 +168,30 @@ class ItemDetailActivity : AppCompatActivity() {
 
                 // 기존 이미지 삭제 한거고, 새 이미지 추가하기.
                 // 갤러리에서 선택이 된 새로운 사진을 넣을 예정.
-                uploadImage(docId)
+                // storage , 기존 이미지 삭제 후, 새 이미지 업로드.
+
+                // Create a storage reference from our app
+                val storageRef = MyApplication.storage.reference
+
+                // Create a reference to the file to delete
+                val desertRef = storageRef.child("AndroidImageShareApp/${docId}.jpg")
+
+                // Delete the file
+                desertRef.delete().addOnSuccessListener {
+                    // File deleted successfully
+                    Log.d("lsy", "스토리지 successfully deleted!")
+                    Toast.makeText(this,"스토리지 삭제 성공", Toast.LENGTH_SHORT).show()
+
+                    // 기존 이미지 삭제 한거고, 새 이미지 추가하기.
+                    // 갤러리에서 선택이 된 새로운 사진을 넣을 예정.
+                    uploadImage(docId)
+
+
+                }.addOnFailureListener {
+                    // Uh-oh, an error occurred!
+                    Log.d("lsy", "스토리지 failed deleted!")
+                    Toast.makeText(this,"스토리지 삭제 실패", Toast.LENGTH_SHORT).show()
+                }
 
             }
         }
