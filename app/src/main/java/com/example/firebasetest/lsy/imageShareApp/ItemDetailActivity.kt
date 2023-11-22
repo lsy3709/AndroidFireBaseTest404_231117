@@ -193,6 +193,21 @@ class ItemDetailActivity : AppCompatActivity() {
                     Toast.makeText(this,"스토리지 삭제 실패", Toast.LENGTH_SHORT).show()
                 }
 
+            } else if ( checkImg == "N" && checkContent == "Y") {
+                val data = hashMapOf(
+                    "docId" to "${docId}",
+                    "email" to "${email}",
+                    "content" to "${binding.contentDetailResultView.text}",
+                    "date" to "${date}",
+                )
+
+                db.collection("AndroidImageShareApp").document("${docId}")
+                    .set(data)
+                    .addOnSuccessListener {
+                        Log.d("lsy", "DocumentSnapshot successfully written!")
+                    }
+                    .addOnFailureListener { e -> Log.w("lsy", "Error writing document", e) }
+
             }
         }
 
