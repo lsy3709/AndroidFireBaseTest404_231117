@@ -205,8 +205,13 @@ class ItemDetailActivity : AppCompatActivity() {
                     .set(data)
                     .addOnSuccessListener {
                         Log.d("lsy", "DocumentSnapshot successfully written!")
+                        Toast.makeText(this,"스토어 글만 수정 성공", Toast.LENGTH_SHORT).show()
+                        finish()
+
                     }
-                    .addOnFailureListener { e -> Log.w("lsy", "Error writing document", e) }
+                    .addOnFailureListener { e -> Log.w("lsy", "Error writing document", e)
+                        Toast.makeText(this,"스토어 글만 수정 실패", Toast.LENGTH_SHORT).show()
+                    }
 
             }
         }
