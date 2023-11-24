@@ -4,10 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="15dp"
-    android:background="#CDDC39"
+    android:background="@color/white"
     android:orientation="vertical"
     android:paddingTop="10dp">
-
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:text="test22222222222222222222222222222222222222222222222222222222222222"
+    android:visibility="invisible"/>
 
     <LinearLayout
         android:layout_width="match_parent"
