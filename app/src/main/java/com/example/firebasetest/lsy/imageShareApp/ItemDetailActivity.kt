@@ -5,7 +5,9 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.text.Editable
+import android.text.InputType
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -59,6 +61,12 @@ class ItemDetailActivity : AppCompatActivity() {
         binding.contentDetailResultView.text =  Editable.Factory.getInstance().newEditable(content)
 
 
+        if(email == MyApplication.email) {
+            binding.updateDetailBtn.visibility = View.VISIBLE
+        } else {
+            binding.updateDetailBtn.visibility = View.GONE
+            binding.contentDetailResultView.inputType = InputType.TYPE_NULL
+        }
 
         // 스토리지에서 이미지 불러와서, Glide 로 출력하기.
         val imgRef = MyApplication.storage.reference

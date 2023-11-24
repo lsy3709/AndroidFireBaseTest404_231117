@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
@@ -40,6 +41,15 @@ class MyAdapter(val context: Context, val itemList: MutableList<ItemData>)
             emailResultView.text = data.email
             dateResultView.text = data.date
             contentResultView.text = data.content
+        }
+
+        //로그인 유저와, 작성자 일치시, 수정 , 삭제 버튼 보이기.
+        if(data.email == MyApplication.email) {
+            holder.binding.deleteBtn.visibility = View.VISIBLE
+            holder.binding.updateBtn.visibility = View.VISIBLE
+        } else {
+            holder.binding.deleteBtn.visibility = View.GONE
+            holder.binding.updateBtn.visibility = View.GONE
         }
 
         // 스토리지에서 이미지 불러와서, Glide 로 출력하기.
@@ -112,6 +122,20 @@ class MyAdapter(val context: Context, val itemList: MutableList<ItemData>)
             // 인텐트 이동시 특정 값을 넣어서 보내고,
         // 2번째 화면에서는 인텐트에서 꺼내서 사용하기.
 //            val intent = (context as Activity).intent
+            val intent = Intent(context,ItemDetailActivity::class.java)
+//            var docId: String? = null
+//            var email: String? = null
+//            var content: String? = null
+//            var date: String? = null
+
+            // 데이터 추가 해보기.
+            intent.putExtra("docId",data.docId)
+            intent.putExtra("email",data.email)
+            intent.putExtra("content",data.content)
+            intent.putExtra("date",data.date)
+            context.startActivity(intent)
+        }
+        holder.binding.imageResultView.setOnClickListener {
             val intent = Intent(context,ItemDetailActivity::class.java)
 //            var docId: String? = null
 //            var email: String? = null
