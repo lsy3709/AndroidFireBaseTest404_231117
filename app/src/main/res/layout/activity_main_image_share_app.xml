@@ -27,11 +27,24 @@
             android:background="#673AB7"
             app:titleTextColor="#FFEB3B"/>
 
+        <!--테스트 샘플 아이디 : ca-app-pub-3940256099942544/6300978111-->
+
+        <com.google.android.gms.ads.AdView
+            xmlns:ads="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/adView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            ads:adSize="BANNER"
+            ads:adUnitId="ca-app-pub-3940256099942544/6300978111">
+        </com.google.android.gms.ads.AdView>
+
 <!--        리사이클러뷰 넣기.-->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="650dp"
             android:background="#E91E63"
             android:layout_marginTop="65dp"
             android:visibility="visible"/>
@@ -46,7 +59,7 @@
             app:rippleColor="@color/white"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
-            android:layout_marginBottom="25dp"
+            android:layout_marginBottom="80dp"
             android:layout_marginRight="25dp"
 
 

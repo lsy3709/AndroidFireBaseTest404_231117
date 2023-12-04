@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.firebasetest.lsy">
-
     <!-- 외부 저장소 접근 퍼미션 추가하기 -->
     <!-- 33버전 이후 부터 미디어 접근 퍼미션 유형이 조금 다름. -->
     <!-- https://developer.android.com/about/versions/13/behavior-changes-13?hl=ko -->
@@ -20,26 +19,31 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FireBaseTest"
         tools:targetApi="31">
-<!--        파이어베이스 FCM 메타 데이터 부분-->
+        <activity
+            android:name=".imageShareApp.TestAdmobActivity"
+            android:exported="false" />
+        <!-- admob 샘플 아이디 : ca-app-pub-3940256099942544~3347511713 -->
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-3940256099942544~3347511713" /> <!-- 파이어베이스 FCM 메타 데이터 부분 -->
         <meta-data
             android:name="com.google.firebase.message.default_notification_icon"
-            android:resource="@drawable/ic_stat_ic_notification"/>
+            android:resource="@drawable/ic_stat_ic_notification" />
         <meta-data
             android:name="com.google.firebase.message.default_notification_color"
-            android:resource="@color/colorAccent"/>
+            android:resource="@color/colorAccent" />
         <meta-data
             android:name="com.google.firebase.message.default_notification_channel_id"
-            android:value="fcm_default_channel"/>
-<!--        백그라운드에서 처리하는 로직-->
+            android:value="fcm_default_channel" /> <!-- 백그라운드에서 처리하는 로직 -->
         <service
             android:name=".fcmTest.MyFirebaseFcmService"
             android:enabled="true"
             android:exported="true">
-<!--            외부앱에 알리는 용도로 사용이 됨-->
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
-            </intent-filter>
 
+            <!-- 외부앱에 알리는 용도로 사용이 됨 -->
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
         </service>
 
         <activity
@@ -50,7 +54,7 @@
             android:exported="true" />
         <activity
             android:name=".imageShareApp.MainImageShareAppActivity"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -68,9 +72,7 @@
             android:exported="true" />
         <activity
             android:name=".MainActivity"
-            android:exported="true">
-
-        </activity>
+            android:exported="true"></activity>
     </application>
 
 </manifest>

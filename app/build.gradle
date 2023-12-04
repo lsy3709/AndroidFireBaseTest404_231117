@@ -47,6 +47,10 @@ android {
 }
 
 dependencies {
+
+    //admob 광고
+    implementation ('com.google.android.gms:play-services-ads:22.5.0')
+
     // 파이어베이스 설정 순서3
     // Import the Firebase BoM
     implementation platform('com.google.firebase:firebase-bom:32.5.0')

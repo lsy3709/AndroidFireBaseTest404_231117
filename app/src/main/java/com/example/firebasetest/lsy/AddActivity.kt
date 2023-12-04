@@ -93,6 +93,8 @@ class AddActivity : AppCompatActivity() {
             // 파일 불러오기. 갤러리에서 사진을 선택 했고, 또한, 해당 위치에 접근해서,
             // 파일도 불러오기 가능함.
             val file = Uri.fromFile(File(filePath))
+            Log.d("lsy","filePath : ${filePath}")
+            Log.d("lsy","file : ${file}")
             // 파이어베이스 스토리지에 업로드하는 함수.
             imgRef.putFile(file)
             // 업로드 후, 수행할 콜백 함수 정의. 실패했을 경우 콜백함수 정의

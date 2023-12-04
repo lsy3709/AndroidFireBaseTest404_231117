@@ -15,6 +15,9 @@ import com.example.firebasetest.lsy.Utils.MyUtil
 import com.example.firebasetest.lsy.databinding.ActivityMainImageShareAppBinding
 import com.example.firebasetest.lsy.imageShareApp.model.ItemData
 import com.example.firebasetest.lsy.imageShareApp.recycler.MyAdapter
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.MobileAds
 
 // 스토어, 스토리지에서  데이터를 받아서, 리사이클러뷰 로 출력할 예정.
 // 인증, 구글인증, 이메일 , 패스워드 인증 재사용.
@@ -24,10 +27,23 @@ import com.example.firebasetest.lsy.imageShareApp.recycler.MyAdapter
 class MainImageShareAppActivity : AppCompatActivity() {
     lateinit var binding : ActivityMainImageShareAppBinding
     lateinit var myAdapter : MyAdapter
+    // admob 광고
+    lateinit var mAdView : AdView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainImageShareAppBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+
+        //광고 admob 샘플 코드
+        MobileAds.initialize(this)
+
+        MobileAds.initialize(this) {}
+
+        mAdView = findViewById(R.id.adView)
+        val adRequest = AdRequest.Builder().build()
+        mAdView.loadAd(adRequest)
 
 
         // 툴바 붙이기
