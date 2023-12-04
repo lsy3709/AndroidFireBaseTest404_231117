@@ -80,7 +80,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:backgroundTint="#FF5722"
-            android:text="가입 (파이어 인증 이메일/패스워드 등록)"
+            android:text="가입(인증확인 가능한 이메일로 가입해주세요)"
             android:textColor="#FFEB3B"
             android:textStyle="bold"
             android:visibility="gone"/>

@@ -1,5 +1,6 @@
 package com.example.firebasetest.lsy
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -7,6 +8,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.example.firebasetest.lsy.databinding.ActivityAuthBinding
+import com.example.firebasetest.lsy.imageShareApp.MainImageShareAppActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
@@ -63,6 +65,7 @@ class AuthActivity : AppCompatActivity() {
                         if(task.isSuccessful){
                             MyApplication.email = account.email
                             chageVisi("login")
+
                         } else {
                             chageVisi("logout")
                         }
@@ -160,6 +163,9 @@ class AuthActivity : AppCompatActivity() {
                         if(MyApplication.checkAuth()){
                             MyApplication.email = email
                             chageVisi("login")
+                            val intent = Intent(this@AuthActivity,MainImageShareAppActivity::class.java)
+                            startActivity(intent)
+                            finish()
                         } else {
                             Toast.makeText(this,"전송된 메일로 인증이 안되었습니다",
                                 Toast.LENGTH_SHORT).show()
@@ -194,9 +200,9 @@ class AuthActivity : AppCompatActivity() {
             binding.authMainText.text ="로그인 하거나 회원가입 해주세요."
             binding.logoutBtn.visibility = View.GONE
             // 그외 버튼, 에디트 텍스트뷰, 회원가입, 구글인증 다 안보이게 설정.
-            binding.signInBtn.visibility = View.VISIBLE
+            binding.signInBtn.visibility = View.GONE
             binding.signInBtn2.visibility = View.VISIBLE
-            binding.googleAuthInBtn.visibility = View.VISIBLE
+            binding.googleAuthInBtn.visibility = View.GONE
             binding.authEmailEdit.visibility = View.VISIBLE
             binding.authPasswordEdit.visibility = View.VISIBLE
             binding.logInBtn.visibility = View.VISIBLE
