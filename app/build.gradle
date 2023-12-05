@@ -8,11 +8,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.firebasetest.lsy'
+    namespace 'com.sylovestp.firebasetest.imageShareApp'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.example.firebasetest.lsy"
+        applicationId "com.sylovestp.firebasetest.imageShareApp"
         minSdk 24
         targetSdk 33
         versionCode 1

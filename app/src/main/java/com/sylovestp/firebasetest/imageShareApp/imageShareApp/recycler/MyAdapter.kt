@@ -1,4 +1,4 @@
-package com.example.firebasetest.lsy.imageShareApp.recycler
+package com.sylovestp.firebasetest.imageShareApp.imageShareApp.recycler
 
 import android.content.Context
 import android.content.Intent
@@ -9,15 +9,15 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.firebasetest.lsy.MyApplication
-import com.example.firebasetest.lsy.MyApplication.Companion.storage
-import com.example.firebasetest.lsy.databinding.ItemMainBinding
-import com.example.firebasetest.lsy.imageShareApp.ItemDetailActivity
-import com.example.firebasetest.lsy.imageShareApp.model.ItemData
+import com.sylovestp.firebasetest.imageShareApp.MyApplication
+import com.sylovestp.firebasetest.imageShareApp.MyApplication.Companion.storage
+import com.sylovestp.firebasetest.imageShareApp.databinding.ItemMainBinding
+import com.sylovestp.firebasetest.imageShareApp.imageShareApp.ItemDetailActivity
+import com.sylovestp.firebasetest.imageShareApp.imageShareApp.model.ItemData
 
 //뷰홀더 설정.
 // 아이템 요소의 뷰를 설정하기. -> 목록요소 뷰 -> 메뉴 아이템 뷰 구성. 백
-class MyViewHolder(val binding : ItemMainBinding ) : RecyclerView.ViewHolder(binding.root)
+class MyViewHolder(val binding : ItemMainBinding) : RecyclerView.ViewHolder(binding.root)
 
 class MyAdapter(val context: Context, val itemList: MutableList<ItemData>)
     :RecyclerView.Adapter<MyViewHolder>() {
@@ -122,7 +122,7 @@ class MyAdapter(val context: Context, val itemList: MutableList<ItemData>)
             // 인텐트 이동시 특정 값을 넣어서 보내고,
         // 2번째 화면에서는 인텐트에서 꺼내서 사용하기.
 //            val intent = (context as Activity).intent
-            val intent = Intent(context,ItemDetailActivity::class.java)
+            val intent = Intent(context, ItemDetailActivity::class.java)
 //            var docId: String? = null
 //            var email: String? = null
 //            var content: String? = null
@@ -136,7 +136,7 @@ class MyAdapter(val context: Context, val itemList: MutableList<ItemData>)
             context.startActivity(intent)
         }
         holder.binding.imageResultView.setOnClickListener {
-            val intent = Intent(context,ItemDetailActivity::class.java)
+            val intent = Intent(context, ItemDetailActivity::class.java)
 //            var docId: String? = null
 //            var email: String? = null
 //            var content: String? = null

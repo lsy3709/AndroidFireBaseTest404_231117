@@ -1,4 +1,4 @@
-package com.example.firebasetest.lsy.imageShareApp
+package com.sylovestp.firebasetest.imageShareApp.imageShareApp
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -10,7 +10,7 @@ class TestAdmobActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(com.example.firebasetest.lsy.R.layout.activity_main)
+        setContentView(com.sylovestp.firebasetest.imageShareApp.R.layout.activity_main)
 
     }
 }

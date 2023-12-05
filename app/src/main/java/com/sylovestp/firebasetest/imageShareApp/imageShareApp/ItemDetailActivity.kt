@@ -1,4 +1,4 @@
-package com.example.firebasetest.lsy.imageShareApp
+package com.sylovestp.firebasetest.imageShareApp.imageShareApp
 
 import android.content.Intent
 import android.net.Uri
@@ -13,10 +13,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.example.firebasetest.lsy.MyApplication
-import com.example.firebasetest.lsy.MyApplication.Companion.db
-import com.example.firebasetest.lsy.Utils.MyUtil
-import com.example.firebasetest.lsy.databinding.ActivityItemDetailBinding
+import com.sylovestp.firebasetest.imageShareApp.MyApplication
+import com.sylovestp.firebasetest.imageShareApp.MyApplication.Companion.db
+import com.sylovestp.firebasetest.imageShareApp.Utils.MyUtil
+import com.sylovestp.firebasetest.imageShareApp.databinding.ActivityItemDetailBinding
 import java.io.File
 import java.util.Date
 

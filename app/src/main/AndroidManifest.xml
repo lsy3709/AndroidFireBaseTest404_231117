@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.firebasetest.lsy">
+    package="com.sylovestp.firebasetest.imageShareApp">
     <!-- 외부 저장소 접근 퍼미션 추가하기 -->
     <!-- 33버전 이후 부터 미디어 접근 퍼미션 유형이 조금 다름. -->
     <!-- https://developer.android.com/about/versions/13/behavior-changes-13?hl=ko -->
@@ -9,18 +9,18 @@
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
 
     <application
-        android:name=".MyApplication"
+        android:name="com.sylovestp.firebasetest.imageShareApp.MyApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:icon="@mipmap/app_logo"
+        android:label="이미지 공유 테스트 앱"
+        android:roundIcon="@mipmap/app_logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.FireBaseTest"
         tools:targetApi="31">
         <activity
-            android:name=".imageShareApp.TestAdmobActivity"
+            android:name="com.sylovestp.firebasetest.imageShareApp.imageShareApp.TestAdmobActivity"
             android:exported="false" />
         <!-- admob 샘플 아이디 : ca-app-pub-3940256099942544~3347511713 -->
         <meta-data
@@ -36,7 +36,7 @@
             android:name="com.google.firebase.message.default_notification_channel_id"
             android:value="fcm_default_channel" /> <!-- 백그라운드에서 처리하는 로직 -->
         <service
-            android:name=".fcmTest.MyFirebaseFcmService"
+            android:name="com.sylovestp.firebasetest.imageShareApp.fcmTest.MyFirebaseFcmService"
             android:enabled="true"
             android:exported="true">
 
@@ -47,13 +47,13 @@
         </service>
 
         <activity
-            android:name=".imageShareApp.ItemDetailActivity"
+            android:name="com.sylovestp.firebasetest.imageShareApp.imageShareApp.ItemDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".imageShareApp.AddImageShareAppActivity"
+            android:name="com.sylovestp.firebasetest.imageShareApp.imageShareApp.AddImageShareAppActivity"
             android:exported="true" />
         <activity
-            android:name=".imageShareApp.MainImageShareAppActivity"
+            android:name="com.sylovestp.firebasetest.imageShareApp.imageShareApp.MainImageShareAppActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -62,16 +62,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".AddFireStoreActivity"
+            android:name="com.sylovestp.firebasetest.imageShareApp.AddFireStoreActivity"
             android:exported="true" />
         <activity
-            android:name=".AddActivity"
+            android:name="com.sylovestp.firebasetest.imageShareApp.AddActivity"
             android:exported="true" />
         <activity
-            android:name=".AuthActivity"
+            android:name="com.sylovestp.firebasetest.imageShareApp.AuthActivity"
             android:exported="true" />
         <activity
-            android:name=".MainActivity"
+            android:name="com.sylovestp.firebasetest.imageShareApp.MainActivity"
             android:exported="true"></activity>
     </application>
 

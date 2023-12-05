@@ -1,4 +1,4 @@
-package com.example.firebasetest.lsy.fcmTest
+package com.sylovestp.firebasetest.imageShareApp.fcmTest
 
 // 설정1, 부모 클래스 변경.
 import android.util.Log

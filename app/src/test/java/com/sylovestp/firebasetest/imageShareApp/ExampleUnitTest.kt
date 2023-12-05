@@ -1,4 +1,4 @@
-package com.example.firebasetest.lsy
+package com.sylovestp.firebasetest.imageShareApp
 
 import org.junit.Test
 

@@ -35,6 +35,17 @@
             android:visibility="gone"/>
 
         <Button
+            android:id="@+id/deleteUserBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:backgroundTint="#FF5722"
+            android:text="회원탈퇴"
+            android:textColor="#FFEB3B"
+            android:textStyle="bold"
+            android:visibility="gone"/>
+
+        <Button
             android:id="@+id/signInBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

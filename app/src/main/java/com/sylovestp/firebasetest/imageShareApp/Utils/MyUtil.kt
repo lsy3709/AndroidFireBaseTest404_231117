@@ -1,4 +1,4 @@
-package com.example.firebasetest.lsy.Utils
+package com.sylovestp.firebasetest.imageShareApp.Utils
 
 import android.Manifest
 import android.content.Intent

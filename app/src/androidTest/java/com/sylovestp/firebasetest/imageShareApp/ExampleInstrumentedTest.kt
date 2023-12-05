@@ -1,4 +1,4 @@
-package com.example.firebasetest.lsy
+package com.sylovestp.firebasetest.imageShareApp
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

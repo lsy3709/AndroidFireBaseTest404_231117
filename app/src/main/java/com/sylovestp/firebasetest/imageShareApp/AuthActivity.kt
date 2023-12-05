@@ -1,4 +1,4 @@
-package com.example.firebasetest.lsy
+package com.sylovestp.firebasetest.imageShareApp
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,13 +6,16 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.example.firebasetest.lsy.databinding.ActivityAuthBinding
-import com.example.firebasetest.lsy.imageShareApp.MainImageShareAppActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.GoogleAuthProvider
+import com.sylovestp.firebasetest.imageShareApp.MyApplication.Companion.db
+import com.sylovestp.firebasetest.imageShareApp.MyApplication.Companion.storage
+import com.sylovestp.firebasetest.imageShareApp.databinding.ActivityAuthBinding
+import com.sylovestp.firebasetest.imageShareApp.imageShareApp.MainImageShareAppActivity
 
 class AuthActivity : AppCompatActivity() {
     lateinit var binding : ActivityAuthBinding
@@ -163,7 +166,7 @@ class AuthActivity : AppCompatActivity() {
                         if(MyApplication.checkAuth()){
                             MyApplication.email = email
                             chageVisi("login")
-                            val intent = Intent(this@AuthActivity,MainImageShareAppActivity::class.java)
+                            val intent = Intent(this@AuthActivity, MainImageShareAppActivity::class.java)
                             startActivity(intent)
                             finish()
                         } else {
@@ -177,7 +180,77 @@ class AuthActivity : AppCompatActivity() {
                 }
         }
 
+        //회원탈퇴
+        binding.deleteUserBtn.setOnClickListener {
+            showDialog()
+
+        }
+
      // onCreate
+    }
+
+    private fun showDialog(){
+        val builder = AlertDialog.Builder(this)
+        builder
+            .setTitle("회원탈퇴")
+            .setMessage("회원탈퇴 할까요?")
+            .setIcon(R.drawable.ic_launcher_foreground)
+            .setPositiveButton("YES") { dialog , which ->
+                // 기능구현
+                val user = MyApplication.auth.currentUser!!
+
+                user.delete()
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            Toast.makeText(this,"회원 탈퇴 성공",Toast.LENGTH_SHORT).show()
+                            //회원 탈퇴후, 작성한 store 글 모두 삭제, 작성자로 검색해서 해당 문서 다가져오기.
+                            db.collection("AndroidImageShareApp")
+                                .whereEqualTo("email", MyApplication.email)
+                                .get()
+                                .addOnSuccessListener { documents ->
+                                    for (document in documents) {
+                                        Log.d("lsy", "${document.id} => ${document.data}")
+                                        // 각 문서 삭제
+                                        db.collection("AndroidImageShareApp").document(document.id)
+                                            .delete()
+                                            .addOnSuccessListener { Log.d("lsy", "DocumentSnapshot successfully deleted!") }
+                                            .addOnFailureListener { e -> Log.w("lsy", "Error deleting document", e) }
+
+                                        // 회원 탈퇴후, 해당 이미지 모두 지우기.
+                                        // Create a storage reference from our app
+                                        val storageRef = storage.reference
+
+// Create a reference to the file to delete
+                                        val desertRef = storageRef.child("AndroidImageShareApp/${document.id}.jpg")
+
+// Delete the file
+                                        desertRef.delete().addOnSuccessListener {
+                                            // File deleted successfully
+                                        }.addOnFailureListener {
+                                            // Uh-oh, an error occurred!
+                                        }
+                                    }
+                                }
+                                .addOnFailureListener { exception ->
+                                    Log.w("lsy", "Error getting documents: ", exception)
+                                }
+
+
+
+
+                            val intent = Intent(this@AuthActivity, MainImageShareAppActivity::class.java)
+                            startActivity(intent)
+                            finish()
+
+                        }
+                    }
+
+            }.setNegativeButton("NO") {dialog, which ->
+
+            }
+
+            .create()
+            .show()
     }
 
     //임의의 함수를 만들기.
@@ -189,6 +262,7 @@ class AuthActivity : AppCompatActivity() {
             // 로그인이 되었다면, 인증된 이메일도 이미 등록이 되어서, 가져와서 사용하기.
             binding.authMainText.text = "${MyApplication.email} 님 반가워요."
             binding.logoutBtn.visibility = View.VISIBLE
+            binding.deleteUserBtn.visibility = View.VISIBLE
             // 그외 버튼, 에디트 텍스트뷰, 회원가입, 구글인증 다 안보이게 설정.
             binding.signInBtn.visibility = View.GONE
             binding.googleAuthInBtn.visibility = View.GONE
@@ -201,6 +275,7 @@ class AuthActivity : AppCompatActivity() {
             binding.logoutBtn.visibility = View.GONE
             // 그외 버튼, 에디트 텍스트뷰, 회원가입, 구글인증 다 안보이게 설정.
             binding.signInBtn.visibility = View.GONE
+            binding.deleteUserBtn.visibility = View.GONE
             binding.signInBtn2.visibility = View.VISIBLE
             binding.googleAuthInBtn.visibility = View.GONE
             binding.authEmailEdit.visibility = View.VISIBLE

@@ -1,12 +1,13 @@
-package com.example.firebasetest.lsy
+package com.sylovestp.firebasetest.imageShareApp
 
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.firebasetest.lsy.MyApplication.Companion.db
-import com.example.firebasetest.lsy.Utils.MyUtil
-import com.example.firebasetest.lsy.databinding.ActivityAddFireStoreBinding
+import com.sylovestp.firebasetest.imageShareApp.MyApplication.Companion.db
+import com.sylovestp.firebasetest.imageShareApp.Utils.MyUtil
+
+import com.sylovestp.firebasetest.imageShareApp.databinding.ActivityAddFireStoreBinding
 import java.util.Date
 
 class AddFireStoreActivity : AppCompatActivity() {

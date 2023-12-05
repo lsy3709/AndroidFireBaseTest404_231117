@@ -1,4 +1,4 @@
-package com.example.firebasetest.lsy
+package com.sylovestp.firebasetest.imageShareApp
 
 import androidx.multidex.MultiDexApplication
 import com.google.firebase.auth.FirebaseAuth

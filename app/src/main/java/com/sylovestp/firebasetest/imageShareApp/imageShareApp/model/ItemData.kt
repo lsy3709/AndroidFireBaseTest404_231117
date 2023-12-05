@@ -1,4 +1,4 @@
-package com.example.firebasetest.lsy.imageShareApp.model
+package com.sylovestp.firebasetest.imageShareApp.imageShareApp.model
 
 class ItemData {
     // 게시글 번호 역할, 이미지를 불러올 예정(단일 이미지)
