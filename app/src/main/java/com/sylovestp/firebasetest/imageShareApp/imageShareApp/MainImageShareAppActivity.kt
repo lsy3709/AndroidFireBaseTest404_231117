@@ -2,6 +2,7 @@ package com.sylovestp.firebasetest.imageShareApp.imageShareApp
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -123,6 +124,7 @@ class MainImageShareAppActivity : AppCompatActivity() {
             }
             .addOnFailureListener {
                 Toast.makeText(this,"서버 데이터 결과 조회 실패",Toast.LENGTH_SHORT).show()
+                Log.d("lsy","실패")
             }
 
     } // makeRecyclerView

@@ -2,15 +2,11 @@ package com.sylovestp.firebasetest.imageShareApp.imageShareApp.recycler
 
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.sylovestp.firebasetest.imageShareApp.MyApplication
-import com.sylovestp.firebasetest.imageShareApp.MyApplication.Companion.storage
 import com.sylovestp.firebasetest.imageShareApp.databinding.ItemMainBinding
 import com.sylovestp.firebasetest.imageShareApp.imageShareApp.ItemDetailActivity
 import com.sylovestp.firebasetest.imageShareApp.imageShareApp.model.ItemData
@@ -44,13 +40,13 @@ class MyAdapter(val context: Context, val itemList: MutableList<ItemData>)
         }
 
         //로그인 유저와, 작성자 일치시, 수정 , 삭제 버튼 보이기.
-        if(data.email == MyApplication.email) {
-            holder.binding.deleteBtn.visibility = View.VISIBLE
-            holder.binding.updateBtn.visibility = View.VISIBLE
-        } else {
-            holder.binding.deleteBtn.visibility = View.GONE
-            holder.binding.updateBtn.visibility = View.GONE
-        }
+//        if(data.email == MyApplication.email) {
+//            holder.binding.deleteBtn.visibility = View.VISIBLE
+//            holder.binding.updateBtn.visibility = View.VISIBLE
+//        } else {
+//            holder.binding.deleteBtn.visibility = View.GONE
+//            holder.binding.updateBtn.visibility = View.GONE
+//        }
 
         // 스토리지에서 이미지 불러와서, Glide 로 출력하기.
         val imgRef = MyApplication.storage.reference
@@ -74,67 +70,67 @@ class MyAdapter(val context: Context, val itemList: MutableList<ItemData>)
 
         // 삭제 기능.
         // 스토어, 이미지 삭제.
-        holder.binding.deleteBtn.setOnClickListener {
-            MyApplication.db.collection("AndroidImageShareApp")
-                .document("${data.docId}")
-                .delete()
-                .addOnSuccessListener {
-                    Log.d("lsy", "스토어 successfully deleted!")
-                    Toast.makeText(context,"스토어 삭제 성공", Toast.LENGTH_SHORT).show()
-
-                    // 스토리지 저장소 이미지도 같이 제거.
-
-                    // Create a storage reference from our app
-                    val storageRef = storage.reference
-
-                    // Create a reference to the file to delete
-                    val desertRef = storageRef.child("AndroidImageShareApp/${data.docId}.jpg")
-
-                    // Delete the file
-                    desertRef.delete().addOnSuccessListener {
-                        // File deleted successfully
-                        Log.d("lsy", "스토리지 successfully deleted!")
-                        Toast.makeText(context,"스토리지 삭제 성공", Toast.LENGTH_SHORT).show()
-                        itemList.removeAt(position)
-                        notifyItemRemoved(position)
-//                        val intent = (context as Activity).intent
-//                        context.finish() //현재 액티비티 종료 실시
-//                        context.overridePendingTransition(0, 0) //효과 없애기
-//                        context.startActivity(intent) //현재 액티비티 재실행 실시
-//                        context.overridePendingTransition(0, 0) //효과 없애기
-                    }.addOnFailureListener {
-                        // Uh-oh, an error occurred!
-                        Log.d("lsy", "스토리지 failed deleted!")
-                        Toast.makeText(context,"스토리지 삭제 실패", Toast.LENGTH_SHORT).show()
-                    }
-
-
-
-                }
-                .addOnFailureListener { e ->
-                    Log.w("lsy", "Error deleting document", e)
-                    Toast.makeText(context,"삭제 실패", Toast.LENGTH_SHORT).show()
-                }
-        } //  // 삭제 기능.
+//        holder.binding.deleteBtn.setOnClickListener {
+//            MyApplication.db.collection("AndroidImageShareApp")
+//                .document("${data.docId}")
+//                .delete()
+//                .addOnSuccessListener {
+//                    Log.d("lsy", "스토어 successfully deleted!")
+//                    Toast.makeText(context,"스토어 삭제 성공", Toast.LENGTH_SHORT).show()
+//
+//                    // 스토리지 저장소 이미지도 같이 제거.
+//
+//                    // Create a storage reference from our app
+//                    val storageRef = storage.reference
+//
+//                    // Create a reference to the file to delete
+//                    val desertRef = storageRef.child("AndroidImageShareApp/${data.docId}.jpg")
+//
+//                    // Delete the file
+//                    desertRef.delete().addOnSuccessListener {
+//                        // File deleted successfully
+//                        Log.d("lsy", "스토리지 successfully deleted!")
+//                        Toast.makeText(context,"스토리지 삭제 성공", Toast.LENGTH_SHORT).show()
+//                        itemList.removeAt(position)
+//                        notifyItemRemoved(position)
+////                        val intent = (context as Activity).intent
+////                        context.finish() //현재 액티비티 종료 실시
+////                        context.overridePendingTransition(0, 0) //효과 없애기
+////                        context.startActivity(intent) //현재 액티비티 재실행 실시
+////                        context.overridePendingTransition(0, 0) //효과 없애기
+//                    }.addOnFailureListener {
+//                        // Uh-oh, an error occurred!
+//                        Log.d("lsy", "스토리지 failed deleted!")
+//                        Toast.makeText(context,"스토리지 삭제 실패", Toast.LENGTH_SHORT).show()
+//                    }
+//
+//
+//
+//                }
+//                .addOnFailureListener { e ->
+//                    Log.w("lsy", "Error deleting document", e)
+//                    Toast.makeText(context,"삭제 실패", Toast.LENGTH_SHORT).show()
+//                }
+//        } //  // 삭제 기능.
 
         // 상세페이지 이동.
-        holder.binding.updateBtn.setOnClickListener {
-            // 인텐트 이동시 특정 값을 넣어서 보내고,
-        // 2번째 화면에서는 인텐트에서 꺼내서 사용하기.
-//            val intent = (context as Activity).intent
-            val intent = Intent(context, ItemDetailActivity::class.java)
-//            var docId: String? = null
-//            var email: String? = null
-//            var content: String? = null
-//            var date: String? = null
-
-            // 데이터 추가 해보기.
-            intent.putExtra("docId",data.docId)
-            intent.putExtra("email",data.email)
-            intent.putExtra("content",data.content)
-            intent.putExtra("date",data.date)
-            context.startActivity(intent)
-        }
+//        holder.binding.updateBtn.setOnClickListener {
+//            // 인텐트 이동시 특정 값을 넣어서 보내고,
+//        // 2번째 화면에서는 인텐트에서 꺼내서 사용하기.
+////            val intent = (context as Activity).intent
+//            val intent = Intent(context, ItemDetailActivity::class.java)
+////            var docId: String? = null
+////            var email: String? = null
+////            var content: String? = null
+////            var date: String? = null
+//
+//            // 데이터 추가 해보기.
+//            intent.putExtra("docId",data.docId)
+//            intent.putExtra("email",data.email)
+//            intent.putExtra("content",data.content)
+//            intent.putExtra("date",data.date)
+//            context.startActivity(intent)
+//        }
         holder.binding.imageResultView.setOnClickListener {
             val intent = Intent(context, ItemDetailActivity::class.java)
 //            var docId: String? = null
@@ -153,3 +149,5 @@ class MyAdapter(val context: Context, val itemList: MutableList<ItemData>)
     } // onBindViewHolder
 
 } //MyAdapter
+
+

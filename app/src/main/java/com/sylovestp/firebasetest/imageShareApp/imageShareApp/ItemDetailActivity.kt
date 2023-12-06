@@ -10,11 +10,14 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.sylovestp.firebasetest.imageShareApp.MyApplication
 import com.sylovestp.firebasetest.imageShareApp.MyApplication.Companion.db
+import com.sylovestp.firebasetest.imageShareApp.MyApplication.Companion.storage
+import com.sylovestp.firebasetest.imageShareApp.R
 import com.sylovestp.firebasetest.imageShareApp.Utils.MyUtil
 import com.sylovestp.firebasetest.imageShareApp.databinding.ActivityItemDetailBinding
 import java.io.File
@@ -63,8 +66,10 @@ class ItemDetailActivity : AppCompatActivity() {
 
         if(email == MyApplication.email) {
             binding.updateDetailBtn.visibility = View.VISIBLE
+            binding.deleteDetailBtn.visibility = View.VISIBLE
         } else {
             binding.updateDetailBtn.visibility = View.GONE
+            binding.deleteDetailBtn.visibility = View.GONE
             binding.contentDetailResultView.inputType = InputType.TYPE_NULL
         }
 
@@ -85,7 +90,7 @@ class ItemDetailActivity : AppCompatActivity() {
                         //결과 뷰에 이미지 넣기.
                         .into(binding.imageDetailResultView)
                     //checkImg = "Y"
-                    Log.d("lsy", "checkImg : ${checkImg}")
+//                    Log.d("lsy", "checkImg : ${checkImg}")
                 }
 
             } // addOnCompleteListener
@@ -117,111 +122,12 @@ class ItemDetailActivity : AppCompatActivity() {
         // 상태 변수 정하기. img 변경 유무
         // 내용은 덮어쓰기 하면 되니까.
         binding.updateDetailBtn.setOnClickListener {
-            checkContent = "Y"
-            if(checkImg =="Y" && checkContent == "Y" ) {
-                // 1) 스토어도 업데이트,
-                // 2) 스토리지는 기존 사진 삭제 후, 새 사진으로 업로드
+            updateshowDialog()
+        }
 
-                //            var docId: String? = null
-//            var email: String? = null
-//            var content: String? = null
-//            var date: String? = null
-                val data = hashMapOf(
-                    "docId" to "${docId}",
-                    "email" to "${email}",
-                    "content" to "${binding.contentDetailResultView.text}",
-                    "date" to "${date}",
-                )
-
-                db.collection("AndroidImageShareApp").document("${docId}")
-                    .set(data)
-                    .addOnSuccessListener {
-                        Log.d("lsy", "DocumentSnapshot successfully written!")
-                        // storage , 기존 이미지 삭제 후, 새 이미지 업로드.
-
-                        // Create a storage reference from our app
-                        val storageRef = MyApplication.storage.reference
-
-                        // Create a reference to the file to delete
-                        val desertRef = storageRef.child("AndroidImageShareApp/${docId}.jpg")
-
-                        // Delete the file
-                        desertRef.delete().addOnSuccessListener {
-                            // File deleted successfully
-                            Log.d("lsy", "스토리지 successfully deleted!")
-                            Toast.makeText(this,"스토리지 삭제 성공", Toast.LENGTH_SHORT).show()
-
-                            // 기존 이미지 삭제 한거고, 새 이미지 추가하기.
-                            // 갤러리에서 선택이 된 새로운 사진을 넣을 예정.
-                            uploadImage(docId)
-
-
-                        }.addOnFailureListener {
-                            // Uh-oh, an error occurred!
-                            Log.d("lsy", "스토리지 failed deleted!")
-                            Toast.makeText(this,"스토리지 삭제 실패", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                    .addOnFailureListener { e -> Log.w("lsy", "Error writing document", e) }
-
-            } else if ( checkImg == "Y" && checkContent == "N") {
-                // 기존 스토리지 업로드된 이미지 삭제 후,
-                // 갤러리에서 선택이 된 새 이미지 다시, 스토리지 업로드 하는 로직.
-                // 작업 을 계속 하다보면,
-                // 반복적으로 사용이 되는 코드,
-                // 예)사진을 선택을 하거나,
-                // 예2) 업로드(이미지,), 업데이트, 삭제  -> 리팩토링.
-                //
-                //MyUtil.pickGalleryToFilePath(this,filePath,binding.imageDetailResultView)
-
-                // 기존 이미지 삭제 한거고, 새 이미지 추가하기.
-                // 갤러리에서 선택이 된 새로운 사진을 넣을 예정.
-                // storage , 기존 이미지 삭제 후, 새 이미지 업로드.
-
-                // Create a storage reference from our app
-                val storageRef = MyApplication.storage.reference
-
-                // Create a reference to the file to delete
-                val desertRef = storageRef.child("AndroidImageShareApp/${docId}.jpg")
-
-                // Delete the file
-                desertRef.delete().addOnSuccessListener {
-                    // File deleted successfully
-                    Log.d("lsy", "스토리지 successfully deleted!")
-                    Toast.makeText(this,"스토리지 삭제 성공", Toast.LENGTH_SHORT).show()
-
-                    // 기존 이미지 삭제 한거고, 새 이미지 추가하기.
-                    // 갤러리에서 선택이 된 새로운 사진을 넣을 예정.
-                    uploadImage(docId)
-
-
-                }.addOnFailureListener {
-                    // Uh-oh, an error occurred!
-                    Log.d("lsy", "스토리지 failed deleted!")
-                    Toast.makeText(this,"스토리지 삭제 실패", Toast.LENGTH_SHORT).show()
-                }
-
-            } else if ( checkImg == "N" && checkContent == "Y") {
-                val data = hashMapOf(
-                    "docId" to "${docId}",
-                    "email" to "${email}",
-                    "content" to "${binding.contentDetailResultView.text}",
-                    "date" to "${date}",
-                )
-
-                db.collection("AndroidImageShareApp").document("${docId}")
-                    .set(data)
-                    .addOnSuccessListener {
-                        Log.d("lsy", "DocumentSnapshot successfully written!")
-                        Toast.makeText(this,"스토어 글만 수정 성공", Toast.LENGTH_SHORT).show()
-                        finish()
-
-                    }
-                    .addOnFailureListener { e -> Log.w("lsy", "Error writing document", e)
-                        Toast.makeText(this,"스토어 글만 수정 실패", Toast.LENGTH_SHORT).show()
-                    }
-
-            }
+        //삭제
+        binding.deleteDetailBtn.setOnClickListener {
+            deleteshowDialog()
         }
 
 
@@ -269,8 +175,8 @@ class ItemDetailActivity : AppCompatActivity() {
                 filePath = cursor?.getString(0) as String
             }
             checkImg = "Y"
-            Log.d("lsy","filePath : ${filePath}")
-            Toast.makeText(this,"filePath : ${filePath}", Toast.LENGTH_LONG).show()
+//            Log.d("lsy","filePath : ${filePath}")
+//            Toast.makeText(this,"filePath : ${filePath}", Toast.LENGTH_LONG).show()
 //                binding.resultFilepath.text = filePath
         } // 조건문 닫는 블록
     }
@@ -295,12 +201,194 @@ class ItemDetailActivity : AppCompatActivity() {
         imgRef.putFile(file)
             // 업로드 후, 수행할 콜백 함수 정의. 실패했을 경우 콜백함수 정의
             .addOnCompleteListener{
-                Toast.makeText(this,"스토리지 업로드 완료",Toast.LENGTH_SHORT).show()
+//                Toast.makeText(this,"스토리지 업로드 완료",Toast.LENGTH_SHORT).show()
                 // 현재 액티비티 종료, 글쓰기 페이지 종료,-> 메인으로 가기.
                 finish()
             }
             .addOnFailureListener {
-                Toast.makeText(this,"스토리지 업로드 실패",Toast.LENGTH_SHORT).show()
+//                Toast.makeText(this,"스토리지 업로드 실패",Toast.LENGTH_SHORT).show()
             }
     }
-}
+
+    private fun updateshowDialog(){
+        val builder = AlertDialog.Builder(this)
+        builder
+            .setTitle("게시글 수정")
+            .setMessage("수정 할까요?")
+            .setIcon(R.drawable.ic_launcher_foreground)
+            .setPositiveButton("YES") { dialog , which ->
+                // 기능구현
+                checkContent = "Y"
+                if(checkImg =="Y" && checkContent == "Y" ) {
+                    // 1) 스토어도 업데이트,
+                    // 2) 스토리지는 기존 사진 삭제 후, 새 사진으로 업로드
+
+                    //            var docId: String? = null
+//            var email: String? = null
+//            var content: String? = null
+//            var date: String? = null
+                    val data = hashMapOf(
+                        "docId" to "${docId}",
+                        "email" to "${email}",
+                        "content" to "${binding.contentDetailResultView.text}",
+                        "date" to "${date}",
+                    )
+
+                    db.collection("AndroidImageShareApp").document("${docId}")
+                        .set(data)
+                        .addOnSuccessListener {
+//                            Log.d("lsy", "DocumentSnapshot successfully written!")
+                            // storage , 기존 이미지 삭제 후, 새 이미지 업로드.
+
+                            // Create a storage reference from our app
+                            val storageRef = MyApplication.storage.reference
+
+                            // Create a reference to the file to delete
+                            val desertRef = storageRef.child("AndroidImageShareApp/${docId}.jpg")
+
+                            // Delete the file
+                            desertRef.delete().addOnSuccessListener {
+                                // File deleted successfully
+//                                Log.d("lsy", "스토리지 successfully deleted!")
+//                                Toast.makeText(this,"스토리지 삭제 성공", Toast.LENGTH_SHORT).show()
+
+                                // 기존 이미지 삭제 한거고, 새 이미지 추가하기.
+                                // 갤러리에서 선택이 된 새로운 사진을 넣을 예정.
+                                uploadImage(docId)
+
+
+                            }.addOnFailureListener {
+                                // Uh-oh, an error occurred!
+//                                Log.d("lsy", "스토리지 failed deleted!")
+//                                Toast.makeText(this,"스토리지 삭제 실패", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                        .addOnFailureListener { e -> Log.w("lsy", "Error writing document", e) }
+
+                } else if ( checkImg == "Y" && checkContent == "N") {
+                    // 기존 스토리지 업로드된 이미지 삭제 후,
+                    // 갤러리에서 선택이 된 새 이미지 다시, 스토리지 업로드 하는 로직.
+                    // 작업 을 계속 하다보면,
+                    // 반복적으로 사용이 되는 코드,
+                    // 예)사진을 선택을 하거나,
+                    // 예2) 업로드(이미지,), 업데이트, 삭제  -> 리팩토링.
+                    //
+                    //MyUtil.pickGalleryToFilePath(this,filePath,binding.imageDetailResultView)
+
+                    // 기존 이미지 삭제 한거고, 새 이미지 추가하기.
+                    // 갤러리에서 선택이 된 새로운 사진을 넣을 예정.
+                    // storage , 기존 이미지 삭제 후, 새 이미지 업로드.
+
+                    // Create a storage reference from our app
+                    val storageRef = MyApplication.storage.reference
+
+                    // Create a reference to the file to delete
+                    val desertRef = storageRef.child("AndroidImageShareApp/${docId}.jpg")
+
+                    // Delete the file
+                    desertRef.delete().addOnSuccessListener {
+                        // File deleted successfully
+//                        Log.d("lsy", "스토리지 successfully deleted!")
+//                        Toast.makeText(this,"스토리지 삭제 성공", Toast.LENGTH_SHORT).show()
+
+                        // 기존 이미지 삭제 한거고, 새 이미지 추가하기.
+                        // 갤러리에서 선택이 된 새로운 사진을 넣을 예정.
+                        uploadImage(docId)
+
+
+                    }.addOnFailureListener {
+                        // Uh-oh, an error occurred!
+//                        Log.d("lsy", "스토리지 failed deleted!")
+                        Toast.makeText(this,"스토리지 삭제 실패", Toast.LENGTH_SHORT).show()
+                    }
+
+                } else if ( checkImg == "N" && checkContent == "Y") {
+                    val data = hashMapOf(
+                        "docId" to "${docId}",
+                        "email" to "${email}",
+                        "content" to "${binding.contentDetailResultView.text}",
+                        "date" to "${date}",
+                    )
+
+                    db.collection("AndroidImageShareApp").document("${docId}")
+                        .set(data)
+                        .addOnSuccessListener {
+//                            Log.d("lsy", "DocumentSnapshot successfully written!")
+//                            Toast.makeText(this,"스토어 글만 수정 성공", Toast.LENGTH_SHORT).show()
+                            finish()
+
+                        }
+                        .addOnFailureListener { e -> Log.w("lsy", "Error writing document", e)
+//                            Toast.makeText(this,"스토어 글만 수정 실패", Toast.LENGTH_SHORT).show()
+                        }
+
+                }
+
+            }.setNegativeButton("NO") {dialog, which ->
+
+            }
+
+            .create()
+            .show()
+    }
+
+    //삭제
+    private fun deleteshowDialog(){
+        val builder = AlertDialog.Builder(this)
+        builder
+            .setTitle("게시글 삭제")
+            .setMessage("삭제 할까요?")
+            .setIcon(R.drawable.ic_launcher_foreground)
+            .setPositiveButton("YES") { dialog , which ->
+                // 기능구현
+                MyApplication.db.collection("AndroidImageShareApp")
+                .document("${docId}")
+                .delete()
+                .addOnSuccessListener {
+//                    Log.d("lsy", "스토어 successfully deleted!")
+//                    Toast.makeText(this@ItemDetailActivity,"스토어 삭제 성공", Toast.LENGTH_SHORT).show()
+
+                    // 스토리지 저장소 이미지도 같이 제거.
+
+                    // Create a storage reference from our app
+                    val storageRef = storage.reference
+
+                    // Create a reference to the file to delete
+                    val desertRef = storageRef.child("AndroidImageShareApp/${docId}.jpg")
+
+                    // Delete the file
+                    desertRef.delete().addOnSuccessListener {
+                        // File deleted successfully
+//                        Log.d("lsy", "스토리지 successfully deleted!")
+//                        Toast.makeText(this@ItemDetailActivity,"스토리지 삭제 성공", Toast.LENGTH_SHORT).show()
+//                        itemList.removeAt(position)
+//                        notifyItemRemoved(position)
+//                        val intent = (context as Activity).intent
+//                        context.finish() //현재 액티비티 종료 실시
+//                        context.overridePendingTransition(0, 0) //효과 없애기
+//                        context.startActivity(intent) //현재 액티비티 재실행 실시
+//                        context.overridePendingTransition(0, 0) //효과 없애기
+                        finish()
+
+                    }.addOnFailureListener {
+                        // Uh-oh, an error occurred!
+//                        Log.d("lsy", "스토리지 failed deleted!")
+//                        Toast.makeText(this@ItemDetailActivity,"스토리지 삭제 실패", Toast.LENGTH_SHORT).show()
+                    }
+
+
+
+                }
+                .addOnFailureListener { e ->
+                    Log.w("lsy", "Error deleting document", e)
+//                    Toast.makeText(this@ItemDetailActivity,"삭제 실패", Toast.LENGTH_SHORT).show()
+                }
+
+            }.setNegativeButton("NO") {dialog, which ->
+
+            }
+
+            .create()
+            .show()
+    }
+} // activity end

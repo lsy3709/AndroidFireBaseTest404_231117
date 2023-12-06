@@ -108,44 +108,51 @@ class AuthActivity : AppCompatActivity() {
         // 파이어 베이스 인증, 해당 메일/ 등록한 패스워드로 등록이되고.
         // 인증해서, 로그인 이 가능함. android:text="가입"
         binding.signInBtn2.setOnClickListener {
+
             val email = binding.authEmailEdit.text.toString()
             val password = binding.authPasswordEdit.text.toString()
 
-            // createUserWithEmailAndPassword 이용해서, 입력한 이메일, 패스워드로 가입하기.
-            MyApplication.auth.createUserWithEmailAndPassword(email,password)
-                // 회원가입이 잘 되었을 경우, 호출되는 콜백함수임.
-                .addOnCompleteListener(this) {
-                    task ->
-                    binding.authEmailEdit.text.clear()
-                    binding.authPasswordEdit.text.clear()
-                    if(task.isSuccessful) {
-                        // 회원 가입 성공 한 경우,
-                        MyApplication.auth.currentUser?.sendEmailVerification()
-                            // 회원가입한 이메일에 인증 링크를 잘보냈다면, 수항해라 콜백함수.
-                            ?.addOnCompleteListener { sendTask ->
-                                if (sendTask.isSuccessful) {
-                                    Toast.makeText(
-                                        this,
-                                        "회원가입 성공, 전송된 메일 확인해주세요.",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                    chageVisi("logout")
-                                } else {
-                                    Toast.makeText(
-                                        this,
-                                        "메일 발송 실패",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                    chageVisi("logout")
-                                }
+            if(!email.isNullOrEmpty() && !password.isNullOrEmpty()) {
+                // createUserWithEmailAndPassword 이용해서, 입력한 이메일, 패스워드로 가입하기.
+                MyApplication.auth.createUserWithEmailAndPassword(email,password)
+                    // 회원가입이 잘 되었을 경우, 호출되는 콜백함수임.
+                    .addOnCompleteListener(this) {
+                            task ->
+                        binding.authEmailEdit.text.clear()
+                        binding.authPasswordEdit.text.clear()
+                        if(task.isSuccessful) {
+                            // 회원 가입 성공 한 경우,
+                            MyApplication.auth.currentUser?.sendEmailVerification()
+                                // 회원가입한 이메일에 인증 링크를 잘보냈다면, 수항해라 콜백함수.
+                                ?.addOnCompleteListener { sendTask ->
+                                    if (sendTask.isSuccessful) {
+                                        Toast.makeText(
+                                            this,
+                                            "회원가입 성공, 전송된 메일 확인해주세요.",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                        chageVisi("logout")
+                                    } else {
+                                        Toast.makeText(
+                                            this,
+                                            "메일 발송 실패",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                        chageVisi("logout")
+                                    }
 
-                            }
-                    }else {
-                        // 회원 가입 실패 한 경우,
-                        Toast.makeText(this,"회원가입 실패",Toast.LENGTH_SHORT).show()
-                        chageVisi("logout")
+                                }
+                        }else {
+                            // 회원 가입 실패 한 경우,
+                            Toast.makeText(this,"회원가입 실패",Toast.LENGTH_SHORT).show()
+                            chageVisi("logout")
+                        }
                     }
-                }
+            } else {
+                Toast.makeText(this@AuthActivity,"계정 정보 확인 해주세요",Toast.LENGTH_SHORT).show()
+            }
+
+
         }
 
         // 가입한 이메일/패스워드로 , 로그인
@@ -153,31 +160,38 @@ class AuthActivity : AppCompatActivity() {
             val email = binding.authEmailEdit.text.toString()
             val password = binding.authPasswordEdit.text.toString()
 
-            MyApplication.auth.signInWithEmailAndPassword(email,password)
-            // 로그인 잘 되었을 경우, 실행될 콜백함수 등록.
-                .addOnCompleteListener(this) {
-                    task ->
-                    binding.authEmailEdit.text.clear()
-                    binding.authPasswordEdit.text.clear()
-                    // 로그인이 된경우
-                    if(task.isSuccessful) {
-                        // 로그인이 되었을 때, 해당 인증 확인.
-                        // 현재 유저 확인, 했을 경우,
-                        if(MyApplication.checkAuth()){
-                            MyApplication.email = email
-                            chageVisi("login")
-                            val intent = Intent(this@AuthActivity, MainImageShareAppActivity::class.java)
-                            startActivity(intent)
-                            finish()
+            if(!email.isNullOrEmpty() && !password.isNullOrEmpty()) {
+
+                MyApplication.auth.signInWithEmailAndPassword(email,password)
+                    // 로그인 잘 되었을 경우, 실행될 콜백함수 등록.
+                    .addOnCompleteListener(this) {
+                            task ->
+                        binding.authEmailEdit.text.clear()
+                        binding.authPasswordEdit.text.clear()
+                        // 로그인이 된경우
+                        if(task.isSuccessful) {
+                            // 로그인이 되었을 때, 해당 인증 확인.
+                            // 현재 유저 확인, 했을 경우,
+                            if(MyApplication.checkAuth()){
+                                MyApplication.email = email
+                                chageVisi("login")
+                                val intent = Intent(this@AuthActivity, MainImageShareAppActivity::class.java)
+                                startActivity(intent)
+                                finish()
+                            } else {
+                                Toast.makeText(this,"전송된 메일로 인증이 안되었습니다",
+                                    Toast.LENGTH_SHORT).show()
+                            }
                         } else {
-                            Toast.makeText(this,"전송된 메일로 인증이 안되었습니다",
-                                Toast.LENGTH_SHORT).show()
+                            // 로그인이 안 된 경우
+                            Toast.makeText(this,"로그인 실패",Toast.LENGTH_SHORT).show()
                         }
-                    } else {
-                        // 로그인이 안 된 경우
-                        Toast.makeText(this,"로그인 실패",Toast.LENGTH_SHORT).show()
                     }
-                }
+            } else {
+                Toast.makeText(this@AuthActivity,"계정 정보 확인 해주세요",Toast.LENGTH_SHORT).show()
+            }
+
+
         }
 
         //회원탈퇴

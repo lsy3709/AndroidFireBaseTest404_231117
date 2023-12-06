@@ -9,6 +9,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -98,7 +99,8 @@ class AddImageShareAppActivity : AppCompatActivity() {
         } else if (item.itemId === R.id.menu_add_save) {
             // 불러온 이미지와, 콘텐츠 내용 , 스토어, 스토리지 사용하기.
             // 함수 적용하기.
-            addStore()
+//            addStore()
+            addshowDialog()
 
         }
         // 저장 구성, 인증은 메인으로 옮기기
@@ -107,30 +109,52 @@ class AddImageShareAppActivity : AppCompatActivity() {
 
     // 스토어 글쓰기 함수,
     private fun addStore() {
-        val data = mapOf(
-              "email" to MyApplication.email,
-            "content" to binding.contentEditView.text.toString(),
-            "date" to MyUtil.dateToString(Date())
-        )
-        // 스토어에 넣기. NoSQL 기반, JSON과 비슷함.
-        MyApplication.db.collection("AndroidImageShareApp")
-            // 데이터 추가
-            .add(data)
-            // 데이터 추가 성공후 실행할 콜백 함수
-            .addOnCompleteListener{
-                // 스토어 글쓰기 수행 후, 성공해서 이 블록이 실행이 됨.
-                // it 데이터가 담겨 있음.
-                Log.d("lsy","글쓰기 성공")
-                Toast.makeText(this,"글쓰기 성공",Toast.LENGTH_SHORT).show()
-                binding.contentEditView.text.clear()
-                // 이미지 업로드를 같이 진행하기.
-                uploadImage(it.result.id)
+        if(!binding.contentEditView.text.isNullOrEmpty() && binding.addImageView !== null ) {
+            val data = mapOf(
+                "email" to MyApplication.email,
+                "content" to binding.contentEditView.text.toString(),
+                "date" to MyUtil.dateToString(Date())
+            )
+            // 스토어에 넣기. NoSQL 기반, JSON과 비슷함.
+            MyApplication.db.collection("AndroidImageShareApp")
+                // 데이터 추가
+                .add(data)
+                // 데이터 추가 성공후 실행할 콜백 함수
+                .addOnCompleteListener {
+                    // 스토어 글쓰기 수행 후, 성공해서 이 블록이 실행이 됨.
+                    // it 데이터가 담겨 있음.
+                    Log.d("lsy", "글쓰기 성공")
+                    Toast.makeText(this, "글쓰기 성공", Toast.LENGTH_SHORT).show()
+                    binding.contentEditView.text.clear()
+                    // 이미지 업로드를 같이 진행하기.
+                    uploadImage(it.result.id)
+                }
+                // 데이터 추가 실패후 실행할 콜백 함수
+                .addOnFailureListener {
+                    Log.d("lsy", "글쓰기 실패")
+                    Toast.makeText(this, "글쓰기 실패", Toast.LENGTH_SHORT).show()
+                }
+        } else {
+            Toast.makeText(this, "콘텐츠, 이미지 1장 필수입니다.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun addshowDialog(){
+        val builder = AlertDialog.Builder(this)
+        builder
+            .setTitle("게시글 추가")
+            .setMessage("추가 할까요?")
+            .setIcon(R.drawable.ic_launcher_foreground)
+            .setPositiveButton("YES") { dialog , which ->
+                // 기능구현
+                addStore()
+
+            }.setNegativeButton("NO") {dialog, which ->
+
             }
-            // 데이터 추가 실패후 실행할 콜백 함수
-            .addOnFailureListener {
-                Log.d("lsy","글쓰기 실패")
-                Toast.makeText(this,"글쓰기 실패",Toast.LENGTH_SHORT).show()
-            }
+
+            .create()
+            .show()
     }
 
 

@@ -56,6 +56,13 @@
                 android:text="수정 적용하기"
                 android:layout_weight="1"
                 android:layout_marginLeft="5dp"/>
+            <Button
+                android:id="@+id/deleteDetailBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="삭제하기"
+                android:layout_weight="1"
+                android:layout_marginLeft="5dp"/>
 
         </LinearLayout>
 
