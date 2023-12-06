@@ -15,7 +15,7 @@ android {
         applicationId "com.sylovestp.firebasetest.imageShareApp"
         minSdk 24
         targetSdk 33
-        versionCode 3
+        versionCode 4
         versionName "1.0"
 
         // 멀티 덱스라고, 한번에 메서드를 수행할수 있는 갯수를 풀어주는 역할.

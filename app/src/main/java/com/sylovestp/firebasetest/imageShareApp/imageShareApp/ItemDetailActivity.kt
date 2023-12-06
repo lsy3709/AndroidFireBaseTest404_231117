@@ -98,15 +98,17 @@ class ItemDetailActivity : AppCompatActivity() {
         // 사진 클릭시 , 갤러리 호출해서, 이미지 불러와서, 해당 filePath 대체하기.
         // 이미지 상태 변수 변경하기. checkImg
         binding.imageDetailResultView.setOnClickListener {
-            // 1) 갤러리 호출 인텐트
-            // 2) 후처리 함수가 필요함.
-            // 갤러리 사진 선택후, 결과 이미지 뷰에 , 프리뷰 미리보기 구성.
-            val intent = Intent(Intent.ACTION_PICK)
-            intent.setDataAndType(
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                "image/*"
-            )
-            requestLauncher.launch(intent)
+            if(email == MyApplication.email) {
+                // 1) 갤러리 호출 인텐트
+                // 2) 후처리 함수가 필요함.
+                // 갤러리 사진 선택후, 결과 이미지 뷰에 , 프리뷰 미리보기 구성.
+                val intent = Intent(Intent.ACTION_PICK)
+                intent.setDataAndType(
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                    "image/*"
+                )
+                requestLauncher.launch(intent)
+            }
 
         }
 
