@@ -65,6 +65,10 @@ android {
 
 dependencies {
 
+    // recaptcha 이전 버전
+    implementation 'com.google.android.gms:play-services-safetynet:17.0.0'
+
+
     // recaptcha
     implementation 'com.google.android.recaptcha:recaptcha:18.3.0'
 

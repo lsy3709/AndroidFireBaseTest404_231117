@@ -14,6 +14,8 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.common.api.CommonStatusCodes
+import com.google.android.gms.safetynet.SafetyNet
 import com.google.android.recaptcha.Recaptcha
 import com.google.android.recaptcha.RecaptchaAction
 import com.google.android.recaptcha.RecaptchaClient
@@ -40,6 +42,36 @@ class AuthActivity : AppCompatActivity() {
 
         // 리캡차 초기화
         initializeRecaptchaClient()
+//        binding.capchaUserBtn.setOnClickListener {
+//            executeLoginAction()
+//
+//        }
+//        binding.capcha2UserBtn.setOnClickListener {
+//            SafetyNet.getClient(application)
+//                .verifyWithRecaptcha("6Lff1S8pAAAAAFMqiwS5NQBTzUPiJmSIJfFrwVoG")
+//                .addOnSuccessListener { response ->
+//                    // Indicates communication with reCAPTCHA service was successful.
+//                    val userResponseToken = response.tokenResult
+//                    checkNotNull(userResponseToken) { "User response token is null" }
+//
+//                    if (!userResponseToken.isEmpty()) {
+//                        // Validate the user response token using the reCAPTCHA siteverify API.
+//                        Log.d("lsy", "onSuccess: $userResponseToken")
+//                    }
+//                }
+//                .addOnFailureListener { e ->
+//                    if (e is ApiException) {
+//                        // An error occurred when communicating with the reCAPTCHA service.
+//                        // Refer to the status code to handle the error appropriately.
+//                        val apiException = e as ApiException
+//                        val statusCode = apiException.statusCode
+//                        Log.d("lsy", "1 Error: " + CommonStatusCodes.getStatusCodeString(statusCode))
+//                    } else {
+//                        // A different, unknown type of error occurred.
+//                        Log.d("lsy", "2 Error: " + e.message)
+//                    }
+//                }
+//        }
 
 
 
@@ -126,8 +158,9 @@ class AuthActivity : AppCompatActivity() {
             executeLoginAction()
             val email = binding.authEmailEdit.text.toString()
             val password = binding.authPasswordEdit.text.toString()
+            val password2 = binding.authPassword2Edit.text.toString()
 
-            if(!email.isNullOrEmpty() && !password.isNullOrEmpty()) {
+            if(password == password2 && !email.isNullOrEmpty() && !password.isNullOrEmpty()) {
                 // createUserWithEmailAndPassword 이용해서, 입력한 이메일, 패스워드로 가입하기.
                 MyApplication.auth.createUserWithEmailAndPassword(email,password)
                     // 회원가입이 잘 되었을 경우, 호출되는 콜백함수임.
@@ -135,6 +168,7 @@ class AuthActivity : AppCompatActivity() {
                             task ->
                         binding.authEmailEdit.text.clear()
                         binding.authPasswordEdit.text.clear()
+                        binding.authPassword2Edit.text.clear()
                         if(task.isSuccessful) {
                             // 회원 가입 성공 한 경우,
                             MyApplication.auth.currentUser?.sendEmailVerification()
@@ -227,8 +261,10 @@ class AuthActivity : AppCompatActivity() {
         binding.logInBtn.setOnClickListener {
             val email = binding.authEmailEdit.text.toString()
             val password = binding.authPasswordEdit.text.toString()
+            val password2 = binding.authPassword2Edit.text.toString()
 
-            if(!email.isNullOrEmpty() && !password.isNullOrEmpty()) {
+            if(password == password2 && !email.isNullOrEmpty() && !password.isNullOrEmpty()) {
+
 
                 MyApplication.auth.signInWithEmailAndPassword(email,password)
                     // 로그인 잘 되었을 경우, 실행될 콜백함수 등록.
@@ -271,6 +307,34 @@ class AuthActivity : AppCompatActivity() {
      // onCreate
     }
 
+    private val listener = View.OnClickListener { view ->
+        SafetyNet.getClient(application)
+            .verifyWithRecaptcha("site-key")
+            .addOnSuccessListener { response ->
+                // Indicates communication with reCAPTCHA service was successful.
+                val userResponseToken = response.tokenResult
+                checkNotNull(userResponseToken) { "User response token is null" }
+
+                if (!userResponseToken.isEmpty()) {
+                    // Validate the user response token using the reCAPTCHA siteverify API.
+                    Log.d("lsy", "onSuccess: $userResponseToken")
+                }
+            }
+            .addOnFailureListener { e ->
+                if (e is ApiException) {
+                    // An error occurred when communicating with the reCAPTCHA service.
+                    // Refer to the status code to handle the error appropriately.
+                    val apiException = e as ApiException
+                    val statusCode = apiException.statusCode
+                    Log.d("lsy", "Error: " + CommonStatusCodes.getStatusCodeString(statusCode))
+                } else {
+                    // A different, unknown type of error occurred.
+                    Log.d("lsy", "Error: " + e.message)
+                }
+            }
+    }
+
+
     private fun initializeRecaptchaClient() {
         lifecycleScope.launch {
             // BuildConfigField 값 호출
@@ -295,7 +359,9 @@ class AuthActivity : AppCompatActivity() {
                     // Handle success ...
                     // See "What's next" section for instructions
                     // about handling tokens.
+                    val CAPCHA_API_KEY = BuildConfig.C_API_KEY
                     Log.d("lsy","캡챠 확인 성공2")
+
                 }
                 .onFailure { exception ->
                     // Handle communication errors ...
@@ -399,6 +465,7 @@ class AuthActivity : AppCompatActivity() {
             binding.signInBtn2.visibility = View.GONE
             binding.authEmailEdit.visibility = View.GONE
             binding.authPasswordEdit.visibility = View.GONE
+            binding.authPassword2Edit.visibility = View.GONE
             binding.logInBtn.visibility = View.GONE
         } else if( mode === "logout") {
             binding.authMainText.text ="로그인 하거나 회원가입 해주세요."
@@ -410,6 +477,7 @@ class AuthActivity : AppCompatActivity() {
             binding.googleAuthInBtn.visibility = View.GONE
             binding.authEmailEdit.visibility = View.VISIBLE
             binding.authPasswordEdit.visibility = View.VISIBLE
+            binding.authPassword2Edit.visibility = View.VISIBLE
             binding.logInBtn.visibility = View.VISIBLE
 
         } else if( mode === "signIn") {
@@ -420,6 +488,7 @@ class AuthActivity : AppCompatActivity() {
             binding.googleAuthInBtn.visibility = View.GONE
             binding.authEmailEdit.visibility = View.VISIBLE
             binding.authPasswordEdit.visibility = View.VISIBLE
+            binding.authPassword2Edit.visibility = View.VISIBLE
             binding.logInBtn.visibility = View.GONE
 
         }

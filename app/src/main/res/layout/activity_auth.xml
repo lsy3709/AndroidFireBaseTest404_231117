@@ -45,6 +45,27 @@
             android:textStyle="bold"
             android:visibility="gone"/>
 
+<!--        <Button-->
+<!--            android:id="@+id/capchaUserBtn"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="20dp"-->
+<!--            android:backgroundTint="#FF5722"-->
+<!--            android:text="본인인증"-->
+<!--            android:textColor="#FFEB3B"-->
+<!--            android:textStyle="bold"-->
+<!--            android:visibility="visible"/>-->
+<!--        <Button-->
+<!--            android:id="@+id/capcha2UserBtn"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="20dp"-->
+<!--            android:backgroundTint="#FF5722"-->
+<!--            android:text="본인인증2"-->
+<!--            android:textColor="#FFEB3B"-->
+<!--            android:textStyle="bold"-->
+<!--            android:visibility="visible"/>-->
+
         <Button
             android:id="@+id/signInBtn"
             android:layout_width="match_parent"
@@ -82,6 +103,14 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:hint="패스워드 6자 이상"
+            android:inputType="textPassword"
+            android:visibility="gone"/>
+        <EditText
+            android:id="@+id/authPassword2Edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:hint="패스워드 확인"
             android:inputType="textPassword"
             android:visibility="gone"/>
 

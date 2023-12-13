@@ -45,6 +45,8 @@ class MyApplication : MultiDexApplication() {
                 false
             }
         }
+
+
     } // companion object
 
     // 생명주기, 최초 1회 동작을 합니다.
@@ -54,6 +56,8 @@ class MyApplication : MultiDexApplication() {
         auth = Firebase.auth
         storage = Firebase.storage
         db = FirebaseFirestore.getInstance()
+
+
 
     }
 
