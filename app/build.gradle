@@ -1,3 +1,4 @@
+
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
@@ -7,9 +8,20 @@ plugins {
 
 }
 
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+
+
 android {
     namespace 'com.sylovestp.firebasetest.imageShareApp'
     compileSdk 34
+
+    // 읽기 과정
+    buildFeatures {
+        buildConfig = true
+    }
 
     defaultConfig {
         applicationId "com.sylovestp.firebasetest.imageShareApp"
@@ -23,10 +35,15 @@ android {
         // 이걸 막아주는 역할.
         multiDexEnabled true
 
+        buildConfigField("String", "C_API_KEY", properties.getProperty("CAPCHA_API_KEY"))
+
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
+
+
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
@@ -47,6 +64,9 @@ android {
 }
 
 dependencies {
+
+    // recaptcha
+    implementation 'com.google.android.recaptcha:recaptcha:18.3.0'
 
     //admob 광고
     implementation ('com.google.android.gms:play-services-ads:22.5.0')
