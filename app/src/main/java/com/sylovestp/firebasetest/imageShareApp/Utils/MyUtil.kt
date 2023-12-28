@@ -66,7 +66,7 @@ class MyUtil {
 
         }
         fun dateToString(date: Date):String {
-            val format = SimpleDateFormat("yyyy-MM-dd-hh:mm:ss")
+            val format = SimpleDateFormat("yyyy-MM-dd-HH:mm:ss")
             return format.format(date)
         }
 
