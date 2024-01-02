@@ -27,7 +27,7 @@
         <!-- admob 샘플 아이디 : ca-app-pub-3940256099942544~3347511713 -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-3940256099942544~3347511713" /> <!-- 파이어베이스 FCM 메타 데이터 부분 -->
+            android:value="ca-app-pub-1537114386989171~7227903698" /> <!-- 파이어베이스 FCM 메타 데이터 부분 -->
         <meta-data
             android:name="com.google.firebase.message.default_notification_icon"
             android:resource="@drawable/ic_stat_ic_notification" />

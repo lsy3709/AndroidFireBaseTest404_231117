@@ -37,7 +37,7 @@
             android:layout_centerHorizontal="true"
             android:layout_alignParentBottom="true"
             ads:adSize="BANNER"
-            ads:adUnitId="ca-app-pub-3940256099942544/6300978111">
+            ads:adUnitId="ca-app-pub-1537114386989171/3273279993">
         </com.google.android.gms.ads.AdView>
 
 <!--        리사이클러뷰 넣기.-->

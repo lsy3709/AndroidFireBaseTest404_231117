@@ -27,8 +27,8 @@ android {
         applicationId "com.sylovestp.firebasetest.imageShareApp"
         minSdk 24
         targetSdk 33
-        versionCode 5
-        versionName "1.0.5"
+        versionCode 8
+        versionName "1.0.8"
 
         // 멀티 덱스라고, 한번에 메서드를 수행할수 있는 갯수를 풀어주는 역할.
         // 이 앱이 참조할 수있는 라이브러리 갯수를 65536 갯수를 초과하면 오류가 발생하는데
