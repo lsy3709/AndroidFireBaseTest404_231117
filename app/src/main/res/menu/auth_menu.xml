@@ -3,9 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/menu_add_donate"
+        android:title="기부"
+        app:showAsAction="always"
+        />
+
+    <item
         android:id="@+id/menu_add_auth"
         android:title="인증"
         app:showAsAction="always"
         />
+
 
 </menu>

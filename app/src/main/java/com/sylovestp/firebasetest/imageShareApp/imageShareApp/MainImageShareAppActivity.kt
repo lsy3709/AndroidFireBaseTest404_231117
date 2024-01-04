@@ -13,6 +13,7 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
 import com.sylovestp.firebasetest.imageShareApp.AuthActivity
+import com.sylovestp.firebasetest.imageShareApp.DonateActivity
 import com.sylovestp.firebasetest.imageShareApp.MyApplication
 import com.sylovestp.firebasetest.imageShareApp.R
 import com.sylovestp.firebasetest.imageShareApp.Utils.MyUtil
@@ -30,6 +31,8 @@ class MainImageShareAppActivity : AppCompatActivity() {
     lateinit var myAdapter : MyAdapter
     // admob 광고
     lateinit var mAdView : AdView
+
+    private final var TAG = "lsy"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -96,6 +99,9 @@ class MainImageShareAppActivity : AppCompatActivity() {
             // AuthActivity 구성해서, 이 화면으로 이동하게끔 설정.
             startActivity(Intent(this, AuthActivity::class.java))
 
+        } else if (item.itemId === R.id.menu_add_donate) {
+            startActivity(Intent(this, DonateActivity::class.java))
+
         }
         // 저장 구성, 인증은 메인으로 옮기기
         return super.onOptionsItemSelected(item)
@@ -124,7 +130,7 @@ class MainImageShareAppActivity : AppCompatActivity() {
             }
             .addOnFailureListener {
                 Toast.makeText(this,"서버 데이터 결과 조회 실패",Toast.LENGTH_SHORT).show()
-                Log.d("lsy","실패")
+                Log.d(TAG,"실패")
             }
 
     } // makeRecyclerView

@@ -9,6 +9,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.MobileAds
 
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -33,12 +36,25 @@ class AuthActivity : AppCompatActivity() {
     lateinit var binding : ActivityAuthBinding
     //리캡챠
     private lateinit var recaptchaClient: RecaptchaClient
+
+    //admob광고
+    lateinit var mAdView: AdView
+
+    private final var TAG = "lsy"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAuthBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
 
+        //광고 admob 샘플 코드
+        MobileAds.initialize(this)
+
+        MobileAds.initialize(this) {}
+
+        mAdView = findViewById(R.id.adView)
+        val adRequest = AdRequest.Builder().build()
+        mAdView.loadAd(adRequest)
 
         // 리캡차 초기화
         initializeRecaptchaClient()
@@ -56,7 +72,7 @@ class AuthActivity : AppCompatActivity() {
 //
 //                    if (!userResponseToken.isEmpty()) {
 //                        // Validate the user response token using the reCAPTCHA siteverify API.
-//                        Log.d("lsy", "onSuccess: $userResponseToken")
+//                        Log.d(TAG, "onSuccess: $userResponseToken")
 //                    }
 //                }
 //                .addOnFailureListener { e ->
@@ -65,10 +81,10 @@ class AuthActivity : AppCompatActivity() {
 //                        // Refer to the status code to handle the error appropriately.
 //                        val apiException = e as ApiException
 //                        val statusCode = apiException.statusCode
-//                        Log.d("lsy", "1 Error: " + CommonStatusCodes.getStatusCodeString(statusCode))
+//                        Log.d(TAG, "1 Error: " + CommonStatusCodes.getStatusCodeString(statusCode))
 //                    } else {
 //                        // A different, unknown type of error occurred.
-//                        Log.d("lsy", "2 Error: " + e.message)
+//                        Log.d(TAG, "2 Error: " + e.message)
 //                    }
 //                }
 //        }
@@ -83,11 +99,11 @@ class AuthActivity : AppCompatActivity() {
         //MyApplication 인증 함수를 이용해서,
     // 인증이 되면, 특정 뷰로 인증됨을 확인
         if(MyApplication.checkAuth()){
-            Log.d("lsy","로그인 인증이 됨")
+            Log.d(TAG,"로그인 인증이 됨")
             // 인증 되면, mode에 따라 보여주는 함수를 동작 시키기
             chageVisi("login")
         } else {
-            Log.d("lsy","로그인 인증이 안됨")
+            Log.d(TAG,"로그인 인증이 안됨")
             // 인증 되면, mode에 따라 보여주는 함수를 동작 시키기
             chageVisi("logout")
         }
@@ -317,7 +333,7 @@ class AuthActivity : AppCompatActivity() {
 
                 if (!userResponseToken.isEmpty()) {
                     // Validate the user response token using the reCAPTCHA siteverify API.
-                    Log.d("lsy", "onSuccess: $userResponseToken")
+                    Log.d(TAG, "onSuccess: $userResponseToken")
                 }
             }
             .addOnFailureListener { e ->
@@ -326,10 +342,10 @@ class AuthActivity : AppCompatActivity() {
                     // Refer to the status code to handle the error appropriately.
                     val apiException = e as ApiException
                     val statusCode = apiException.statusCode
-                    Log.d("lsy", "Error: " + CommonStatusCodes.getStatusCodeString(statusCode))
+                    Log.d(TAG, "Error: " + CommonStatusCodes.getStatusCodeString(statusCode))
                 } else {
                     // A different, unknown type of error occurred.
-                    Log.d("lsy", "Error: " + e.message)
+                    Log.d(TAG, "Error: " + e.message)
                 }
             }
     }
@@ -342,7 +358,7 @@ class AuthActivity : AppCompatActivity() {
             Recaptcha.getClient(application, CAPCHA_API_KEY)
                 .onSuccess { client ->
                     recaptchaClient = client
-                    Log.d("lsy","캡챠 확인 성공")
+                    Log.d(TAG,"캡챠 확인 성공")
                 }
                 .onFailure { exception ->
                     // Handle communication errors ...
@@ -360,7 +376,7 @@ class AuthActivity : AppCompatActivity() {
                     // See "What's next" section for instructions
                     // about handling tokens.
                     val CAPCHA_API_KEY = BuildConfig.C_API_KEY
-                    Log.d("lsy","캡챠 확인 성공2")
+                    Log.d(TAG,"캡챠 확인 성공2")
 
                 }
                 .onFailure { exception ->
@@ -405,12 +421,12 @@ class AuthActivity : AppCompatActivity() {
                                 .get()
                                 .addOnSuccessListener { documents ->
                                     for (document in documents) {
-                                        Log.d("lsy", "${document.id} => ${document.data}")
+                                        Log.d(TAG, "${document.id} => ${document.data}")
                                         // 각 문서 삭제
                                         db.collection("AndroidImageShareApp").document(document.id)
                                             .delete()
-                                            .addOnSuccessListener { Log.d("lsy", "DocumentSnapshot successfully deleted!") }
-                                            .addOnFailureListener { e -> Log.w("lsy", "Error deleting document", e) }
+                                            .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully deleted!") }
+                                            .addOnFailureListener { e -> Log.w(TAG, "Error deleting document", e) }
 
                                         // 회원 탈퇴후, 해당 이미지 모두 지우기.
                                         // Create a storage reference from our app
@@ -428,7 +444,7 @@ class AuthActivity : AppCompatActivity() {
                                     }
                                 }
                                 .addOnFailureListener { exception ->
-                                    Log.w("lsy", "Error getting documents: ", exception)
+                                    Log.w(TAG, "Error getting documents: ", exception)
                                 }
 
 

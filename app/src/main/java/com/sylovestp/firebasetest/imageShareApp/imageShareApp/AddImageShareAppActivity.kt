@@ -13,6 +13,9 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.MobileAds
 import com.sylovestp.firebasetest.imageShareApp.MyApplication
 import com.sylovestp.firebasetest.imageShareApp.R
 import com.sylovestp.firebasetest.imageShareApp.Utils.MyUtil
@@ -24,10 +27,22 @@ class AddImageShareAppActivity : AppCompatActivity() {
     lateinit var binding : ActivityAddImageShareAppBinding
     // 갤러리에 선택된 , 사진의 파일의 경로 가져오기.
     lateinit var filePath : String
+
+    //admob광고
+    lateinit var mAdView: AdView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAddImageShareAppBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        //광고 admob 샘플 코드
+        MobileAds.initialize(this)
+
+        MobileAds.initialize(this) {}
+
+        mAdView = findViewById(R.id.adView)
+        val adRequest = AdRequest.Builder().build()
+        mAdView.loadAd(adRequest)
 
         // 툴바 붙이기
         setSupportActionBar(binding.toolbarAdd)

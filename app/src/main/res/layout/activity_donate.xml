@@ -1,44 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".imageShareApp.AddImageShareAppActivity">
+    tools:context=".DonateActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="770dp"
-        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbarAdd"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/donateRewardAdBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#673AB7"
-            app:titleTextColor="#FFEB3B"/>
+            android:layout_marginTop="20dp"
+            android:text="개발자에게 보상형 광고로 응원해주기"/>
 
-        <ImageView
-            android:id="@+id/addImageView"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:scaleType="fitXY"/>
-        <!--        툴바 뷰 넣기-->
-
-
-        <EditText
-            android:id="@+id/contentEditView"
+        <Button
+            android:id="@+id/donateFowardAdBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="내용 입력해주세요."
-            android:layout_gravity="left|top"/>
+            android:layout_marginTop="20dp"
+            android:text="개발자에게 전면 광고로 응원해주기"/>
+
+
+
 
 
     </LinearLayout>
-
     <com.google.android.gms.ads.AdView
         xmlns:ads="http://schemas.android.com/apk/res-auto"
         android:id="@+id/adView"
@@ -52,5 +46,6 @@
         ads:adSize="BANNER"
         ads:adUnitId="ca-app-pub-1537114386989171/3273279993">
     </com.google.android.gms.ads.AdView>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
