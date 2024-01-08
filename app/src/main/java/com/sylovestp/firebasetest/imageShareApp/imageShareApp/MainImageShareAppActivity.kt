@@ -12,6 +12,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
+import com.google.android.ump.ConsentForm
+import com.google.android.ump.ConsentInformation
+import com.google.android.ump.ConsentRequestParameters
+import com.google.android.ump.UserMessagingPlatform
 import com.sylovestp.firebasetest.imageShareApp.AuthActivity
 import com.sylovestp.firebasetest.imageShareApp.DonateActivity
 import com.sylovestp.firebasetest.imageShareApp.MyApplication
@@ -20,6 +24,7 @@ import com.sylovestp.firebasetest.imageShareApp.Utils.MyUtil
 import com.sylovestp.firebasetest.imageShareApp.databinding.ActivityMainImageShareAppBinding
 import com.sylovestp.firebasetest.imageShareApp.imageShareApp.model.ItemData
 import com.sylovestp.firebasetest.imageShareApp.imageShareApp.recycler.MyAdapter
+import java.util.concurrent.atomic.AtomicBoolean
 
 // 스토어, 스토리지에서  데이터를 받아서, 리사이클러뷰 로 출력할 예정.
 // 인증, 구글인증, 이메일 , 패스워드 인증 재사용.
@@ -34,20 +39,76 @@ class MainImageShareAppActivity : AppCompatActivity() {
 
     private final var TAG = "lsy"
 
+    // 유럽 연합 , 영국 개인정보 관련
+    private lateinit var consentInformation: ConsentInformation
+
+    // Use an atomic boolean to initialize the Google Mobile Ads SDK and load ads once.
+    private var isMobileAdsInitializeCalled = AtomicBoolean(false)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainImageShareAppBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
 
+        // 유럽 연합 , 영국 개인정보 관련
+        // Create a ConsentRequestParameters object.
+        val params = ConsentRequestParameters
+            .Builder()
+            .build()
+
+        consentInformation = UserMessagingPlatform.getConsentInformation(this)
+        consentInformation.requestConsentInfoUpdate(
+            this,
+            params,
+            ConsentInformation.OnConsentInfoUpdateSuccessListener {
+                UserMessagingPlatform.loadAndShowConsentFormIfRequired(
+                    this@MainImageShareAppActivity,
+                    ConsentForm.OnConsentFormDismissedListener {
+                            loadAndShowError ->
+                        // Consent gathering failed.
+                        if (loadAndShowError != null) {
+                            Log.w(TAG, String.format("%s: %s",
+                                loadAndShowError.errorCode,
+                                loadAndShowError.message
+                            ))
+                        }
+
+                        // Consent has been gathered.
+                        if (consentInformation.canRequestAds()) {
+                            initializeMobileAdsSdk()
+                        }
+                    }
+                )
+            },
+            ConsentInformation.OnConsentInfoUpdateFailureListener {
+                    requestConsentError ->
+                // Consent gathering failed.
+                Log.w(TAG, String.format("%s: %s",
+                    requestConsentError.errorCode,
+                    requestConsentError.message
+                ))
+            })
+
+        // Check if you can initialize the Google Mobile Ads SDK in parallel
+        // while checking for new consent information. Consent obtained in
+        // the previous session can be used to request ads.
+        if (consentInformation.canRequestAds()) {
+            initializeMobileAdsSdk()
+        }
+
+
+
+
+
         //광고 admob 샘플 코드
-        MobileAds.initialize(this)
-
-        MobileAds.initialize(this) {}
-
-        mAdView = findViewById(R.id.adView)
-        val adRequest = AdRequest.Builder().build()
-        mAdView.loadAd(adRequest)
+//        MobileAds.initialize(this)
+//
+//        MobileAds.initialize(this) {}
+//
+//        mAdView = findViewById(R.id.adView)
+//        val adRequest = AdRequest.Builder().build()
+//        mAdView.loadAd(adRequest)
 
 
         // 툴바 붙이기
@@ -72,6 +133,24 @@ class MainImageShareAppActivity : AppCompatActivity() {
 
 
     }// onCreate
+
+    fun initializeMobileAdsSdk() {
+        if (isMobileAdsInitializeCalled.getAndSet(true)) {
+            return
+        }
+
+        // Initialize the Google Mobile Ads SDK.
+        MobileAds.initialize(this)
+
+        // TODO: Request an ad.
+        MobileAds.initialize(this)
+
+        MobileAds.initialize(this) {}
+
+        mAdView = findViewById(R.id.adView)
+        val adRequest = AdRequest.Builder().build()
+        mAdView.loadAd(adRequest)
+    }
 
     override fun onStart() {
         super.onStart()
