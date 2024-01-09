@@ -13,10 +13,6 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.interstitial.InterstitialAd
-import com.google.android.ump.ConsentForm
-import com.google.android.ump.ConsentInformation
-import com.google.android.ump.ConsentRequestParameters
-import com.google.android.ump.UserMessagingPlatform
 import com.sylovestp.firebasetest.imageShareApp.AuthActivity
 import com.sylovestp.firebasetest.imageShareApp.DonateActivity
 import com.sylovestp.firebasetest.imageShareApp.MyApplication
@@ -121,6 +117,7 @@ class MainImageShareAppActivity : AppCompatActivity() {
 
         // 유럽 연합 , 영국 개인정보 관련2
         // GDPR 로드
+
         checkAdMobGDPRConsent()
 
 
@@ -233,4 +230,61 @@ class MainImageShareAppActivity : AppCompatActivity() {
     } // makeRecyclerView
 
 
+    // 유럽 2
+
+
+
+    private fun checkAdMobGDPRConsent(){
+
+        googleMobileAdsConsentManager = GoogleMobileAdsConsentManager.getInstance(this)
+        googleMobileAdsConsentManager.gatherConsent(
+            this,
+        ) { error ->
+            Log.i(
+                TAG,
+                "Consent gathering result: ${error?.message}, googleMobileAdsConsentManager.canRequestAds: ${googleMobileAdsConsentManager.canRequestAds}"
+            )
+
+            if (error != null) {
+                // Consent not obtained in current session.
+                Log.d(TAG, "${error.errorCode}: ${error.message}")
+                initializeMobileAdsSdk()
+            } else {
+                if (googleMobileAdsConsentManager.canRequestAds) {
+                    initializeMobileAdsSdk()
+                }
+            }
+        }
+
+        // This sample attempts to load ads using consent obtained in the previous session.
+        if (googleMobileAdsConsentManager.canRequestAds) {
+            initializeMobileAdsSdk()
+        }
+    }
+
+
+     private fun initializeMobileAdsSdk() {
+        if (isMobileAdsInitializeCalled.getAndSet(true)) {
+            return
+        }
+        // Initialize the Google Mobile Ads SDK.
+        MobileAds.initialize(this)
+
+        // TODO: Request an ad.
+        MobileAds.initialize(this)
+
+        MobileAds.initialize(this) {}
+
+        mAdView = findViewById(R.id.adView)
+        val adRequest = AdRequest.Builder().build()
+        mAdView.loadAd(adRequest)
+    }
+
+
+
+    // 생략
 }
+
+    //유럽 2
+
+

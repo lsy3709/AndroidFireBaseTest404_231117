@@ -12,7 +12,7 @@
         android:orientation="vertical">
 
         <Button
-            android:id="@+id/EuSettingBtn"
+            android:id="@+id/btnGdprSetting"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="동의 옵션"></Button>
