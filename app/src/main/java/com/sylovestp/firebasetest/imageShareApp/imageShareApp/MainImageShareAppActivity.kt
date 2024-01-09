@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.ump.ConsentForm
 import com.google.android.ump.ConsentInformation
 import com.google.android.ump.ConsentRequestParameters
@@ -40,10 +41,17 @@ class MainImageShareAppActivity : AppCompatActivity() {
     private final var TAG = "lsy"
 
     // 유럽 연합 , 영국 개인정보 관련
-    private lateinit var consentInformation: ConsentInformation
+//    private lateinit var consentInformation: ConsentInformation
 
     // Use an atomic boolean to initialize the Google Mobile Ads SDK and load ads once.
-    private var isMobileAdsInitializeCalled = AtomicBoolean(false)
+//    private var isMobileAdsInitializeCalled = AtomicBoolean(false)
+
+
+    // 유럽 연합 , 영국 개인정보 관련 2
+    private var interstitialAd: InterstitialAd? = null // Admob 전면 광고 관련
+
+    private val isMobileAdsInitializeCalled = AtomicBoolean(false)
+    private lateinit var googleMobileAdsConsentManager: GoogleMobileAdsConsentManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,49 +61,49 @@ class MainImageShareAppActivity : AppCompatActivity() {
 
         // 유럽 연합 , 영국 개인정보 관련
         // Create a ConsentRequestParameters object.
-        val params = ConsentRequestParameters
-            .Builder()
-            .build()
-
-        consentInformation = UserMessagingPlatform.getConsentInformation(this)
-        consentInformation.requestConsentInfoUpdate(
-            this,
-            params,
-            ConsentInformation.OnConsentInfoUpdateSuccessListener {
-                UserMessagingPlatform.loadAndShowConsentFormIfRequired(
-                    this@MainImageShareAppActivity,
-                    ConsentForm.OnConsentFormDismissedListener {
-                            loadAndShowError ->
-                        // Consent gathering failed.
-                        if (loadAndShowError != null) {
-                            Log.w(TAG, String.format("%s: %s",
-                                loadAndShowError.errorCode,
-                                loadAndShowError.message
-                            ))
-                        }
-
-                        // Consent has been gathered.
-                        if (consentInformation.canRequestAds()) {
-                            initializeMobileAdsSdk()
-                        }
-                    }
-                )
-            },
-            ConsentInformation.OnConsentInfoUpdateFailureListener {
-                    requestConsentError ->
-                // Consent gathering failed.
-                Log.w(TAG, String.format("%s: %s",
-                    requestConsentError.errorCode,
-                    requestConsentError.message
-                ))
-            })
+//        val params = ConsentRequestParameters
+//            .Builder()
+//            .build()
+//
+//        consentInformation = UserMessagingPlatform.getConsentInformation(this)
+//        consentInformation.requestConsentInfoUpdate(
+//            this,
+//            params,
+//            ConsentInformation.OnConsentInfoUpdateSuccessListener {
+//                UserMessagingPlatform.loadAndShowConsentFormIfRequired(
+//                    this@MainImageShareAppActivity,
+//                    ConsentForm.OnConsentFormDismissedListener {
+//                            loadAndShowError ->
+//                        // Consent gathering failed.
+//                        if (loadAndShowError != null) {
+//                            Log.w(TAG, String.format("%s: %s",
+//                                loadAndShowError.errorCode,
+//                                loadAndShowError.message
+//                            ))
+//                        }
+//
+//                        // Consent has been gathered.
+//                        if (consentInformation.canRequestAds()) {
+//                            initializeMobileAdsSdk()
+//                        }
+//                    }
+//                )
+//            },
+//            ConsentInformation.OnConsentInfoUpdateFailureListener {
+//                    requestConsentError ->
+//                // Consent gathering failed.
+//                Log.w(TAG, String.format("%s: %s",
+//                    requestConsentError.errorCode,
+//                    requestConsentError.message
+//                ))
+//            })
 
         // Check if you can initialize the Google Mobile Ads SDK in parallel
         // while checking for new consent information. Consent obtained in
         // the previous session can be used to request ads.
-        if (consentInformation.canRequestAds()) {
-            initializeMobileAdsSdk()
-        }
+//        if (consentInformation.canRequestAds()) {
+//            initializeMobileAdsSdk()
+//        }
 
 
 
@@ -109,6 +117,12 @@ class MainImageShareAppActivity : AppCompatActivity() {
 //        mAdView = findViewById(R.id.adView)
 //        val adRequest = AdRequest.Builder().build()
 //        mAdView.loadAd(adRequest)
+
+
+        // 유럽 연합 , 영국 개인정보 관련2
+        // GDPR 로드
+        checkAdMobGDPRConsent()
+
 
 
         // 툴바 붙이기
@@ -134,23 +148,23 @@ class MainImageShareAppActivity : AppCompatActivity() {
 
     }// onCreate
 
-    fun initializeMobileAdsSdk() {
-        if (isMobileAdsInitializeCalled.getAndSet(true)) {
-            return
-        }
-
-        // Initialize the Google Mobile Ads SDK.
-        MobileAds.initialize(this)
-
-        // TODO: Request an ad.
-        MobileAds.initialize(this)
-
-        MobileAds.initialize(this) {}
-
-        mAdView = findViewById(R.id.adView)
-        val adRequest = AdRequest.Builder().build()
-        mAdView.loadAd(adRequest)
-    }
+//    fun initializeMobileAdsSdk() {
+//        if (isMobileAdsInitializeCalled.getAndSet(true)) {
+//            return
+//        }
+//
+//        // Initialize the Google Mobile Ads SDK.
+//        MobileAds.initialize(this)
+//
+//        // TODO: Request an ad.
+//        MobileAds.initialize(this)
+//
+//        MobileAds.initialize(this) {}
+//
+//        mAdView = findViewById(R.id.adView)
+//        val adRequest = AdRequest.Builder().build()
+//        mAdView.loadAd(adRequest)
+//    }
 
     override fun onStart() {
         super.onStart()
@@ -181,7 +195,11 @@ class MainImageShareAppActivity : AppCompatActivity() {
         } else if (item.itemId === R.id.menu_add_donate) {
             startActivity(Intent(this, DonateActivity::class.java))
 
+        } else if (item.itemId === R.id.menu_add_setting) {
+            startActivity(Intent(this, SettingEuActivity::class.java))
+
         }
+
         // 저장 구성, 인증은 메인으로 옮기기
         return super.onOptionsItemSelected(item)
     }

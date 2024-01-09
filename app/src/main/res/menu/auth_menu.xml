@@ -14,5 +14,11 @@
         app:showAsAction="always"
         />
 
+    <item
+        android:id="@+id/menu_add_setting"
+        android:title="설정"
+        app:showAsAction="always"
+        />
+
 
 </menu>
